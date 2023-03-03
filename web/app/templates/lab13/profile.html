@@ -1,0 +1,108 @@
+
+
+{% extends "lab13/base.html" %}
+{% block content %}
+
+{% with messages = get_flashed_messages() %}
+      {% if messages %}
+          <div class="flash-messages">
+              {% for message in messages %}
+                  <div class="flash-message">{{ message }}</div>
+              {% endfor %}
+          </div>
+      {% endif %}
+  {% endwith %}
+<div class="card" id="editUser_display">
+  <img src="{{ current_user.avatar_url }}" width="120">  </br>
+  <strong>Name</strong>
+  <span id="userName">{{ current_user.name }}</span><br/>
+  <strong>Email</strong>
+  <span id="userEmail">{{ current_user.email }}</span><br/>  
+  
+  <button class="edit-profile-button" id="editBut"><i class="fa-solid fa-user"></i> Edit Profile</button> </br>
+  <button class="edit-pw-button" id="editPassword"><i class="fa-solid fa-key"></i> Change Password</button>
+</div>
+
+
+<div id="myForm" class="form-popup">
+  <form action="/lab11/submit-form" method="post" class="form-container">
+      <button type="button" class="btncancel" id="closeForm">X</button>
+      <label for="name" style="color:black;"><b>Name</b></label>
+      <input type="text" name="name" value="{{current_user.name}}" required>
+
+      <label for="email" style="color:black;"><b>Email</b></label>
+      <input type="email" name="email" value="{{current_user.email}}" required>
+    
+      <label for="password" style="color:black;"><b>Password</b></label>
+      <input type="password" name="password" id="password" required>
+      
+      <button type="submit" class="btn">Submit</button>    
+  </form>
+</div>
+
+
+
+
+<div id="myFormPassword" class="form-popup">
+  
+  <form action="/lab11/change-password" method="post" class="form-container">
+      <button type="button" class="btncancel" id="closeForm2">X</button>
+      
+      <input type="hidden" name="name" value="{{current_user.name}}" required>      
+      <input type="hidden" name="email" value="{{current_user.email}}" required>
+
+      <label for="password" style="color:black;"><b>Password</b></label>
+      <input type="password" name="curr_password" id="curr_password" required>
+      
+      <label for="password" style="color:black;"><b>New Password</b></label>
+      <input type="password" name="new_password" id="new_password" required>
+    
+      <label for="password" style="color:black;"><b>Confirm Password</b></label>
+      <input type="password" name="confirm_password" id="confirm_password" required>
+      <button type="submit" class="btn">Submit</button>
+  </form>
+</div>
+
+
+<script>
+  const openFormButton = document.getElementById("editBut");
+  const openPassChange = document.getElementById("editPassword");
+  const closeFormButton = document.getElementById("closeForm");
+  const closePassForm = document.getElementById("closeForm2");
+  const myForm = document.getElementById("myForm");
+  const myFormPassword = document.getElementById("myFormPassword");
+  
+  openFormButton.addEventListener("click", () => {
+    myForm.style.display = "block";
+  });
+  
+  closeFormButton.addEventListener("click", () => {
+    myForm.style.display = "none";
+  });
+  
+  window.addEventListener("click", (event) => {
+    if (event.target == myForm) {
+      myForm.style.display = "none";
+    }
+  });
+
+  openPassChange.addEventListener("click", () => {
+    myFormPassword.style.display = "block";
+  });
+  
+  closePassForm.addEventListener("click", () => {
+    myFormPassword.style.display = "none";
+  });
+  
+  window.addEventListener("click", (event) => {
+    if (event.target == myFormPassword) {
+      myFormPassword.style.display = "none";
+    }
+  });
+  
+</script>
+
+
+
+{% endblock %}
+
