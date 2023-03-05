@@ -320,3 +320,7 @@ $("#editProfile").click(function () {
   window.location.href = "profile";
 });
 
+
+$("#editBut").click(function () {
+  clearForm();
+});

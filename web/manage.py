@@ -16,7 +16,7 @@ def create_db():
 def seed_db():
 
     db.session.add(AuthUser(email="test0@gmail.com", name='Test 0',
-                            password=generate_password_hash('1111', method='sha256'),
+                            password=generate_password_hash('0000', method='sha256'),
                             avatar_url='https://ui-avatars.com/api/?name=Test+0&background=83ee03&color=fff'))
 
     db.session.add(AuthUser(email="test1@gmail.com", name='Test 1',
@@ -24,7 +24,7 @@ def seed_db():
                             avatar_url='https://ui-avatars.com/api/?name=Test+1&background=83ee03&color=fff'))
     
     db.session.add(AuthUser(email="test2@gmail.com", name='Test 2',
-                            password=generate_password_hash('1111', method='sha256'),
+                            password=generate_password_hash('2222', method='sha256'),
                             avatar_url='https://ui-avatars.com/api/?name=Test+2&background=83ee03&color=fff'))
     
 

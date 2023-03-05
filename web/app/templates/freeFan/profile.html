@@ -25,7 +25,7 @@
 
 
 <div id="myForm" class="form-popup">
-  <form action="/lab11/submit-form" method="post" class="form-container">
+  <form action="/submit-form" method="post" class="form-container">
       <button type="button" class="btncancel" id="closeForm">X</button>
       <label for="name" style="color:black;"><b>Name</b></label>
       <input type="text" name="name" value="{{current_user.name}}" required>
@@ -45,7 +45,7 @@
 
 <div id="myFormPassword" class="form-popup">
   
-  <form action="/lab11/change-password" method="post" class="form-container">
+  <form action="/change-password" method="post" class="form-container">
       <button type="button" class="btncancel" id="closeForm2">X</button>
       
       <input type="hidden" name="name" value="{{current_user.name}}" required>      

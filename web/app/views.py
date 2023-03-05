@@ -229,14 +229,17 @@ def submit_form():
     userEmail = AuthUser.query.filter_by(email=new_email).first()
     userName = AuthUser.query.filter_by(name=new_name).first()
     
-    if userEmail and current_user.email != request.form['email']:
-        flash('This email is already taken.')
-        
-    elif userName and current_user.name != request.form['name']:
-        flash('This username is already taken.')
+    
         
     # Check if the current password is correct
-    elif check_password_hash(current_user.password, current_password):
+    if check_password_hash(current_user.password, current_password):
+        if userEmail and current_user.email != request.form['email']:
+            flash('This email is already taken.')
+            return redirect(url_for('freeFan_profile'))
+        
+        elif userName and current_user.name != request.form['name']:
+            flash('This username is already taken.')
+            return redirect(url_for('freeFan_profile'))
         # Update the user's name and email
         old_name = current_user.name
         old_email = current_user.email
