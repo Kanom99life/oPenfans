@@ -4,7 +4,7 @@ var curr_name = $("#name").val();
 
 $(document).ready(function () {
     (function () {
-        $.getJSON("lab11/blogentry", blog_table);
+        $.getJSON("blogentry", blog_table);
     })();
 });
 
@@ -217,15 +217,14 @@ function showDropdownMenu(event) {
 }
 
 
-
 function removeItem(id) {
   if (!confirm("Are you sure to delete this?")) {
-    console.log("not pass")
+    // console.log("not pass")
     return false;
   }
   
-  console.log("pass")
-  var url = "lab11/remove_blog"
+  // console.log("pass")
+  var url = "remove_blog"
   var formData = { 'id': id};
   $.post(url, formData, function (blog_data) {
     refresh_table(blog_data)
@@ -276,7 +275,7 @@ $("#add_blog").click(function () {
 
 $("#add_blog_notAuth").click(function () {
   clearForm();
-  window.location.href = "lab11/login";
+  window.location.href = "login";
 });
 
 $("#clear_form").click(function () {
@@ -303,21 +302,21 @@ function openFullscreen(img) {
 
 $("#login").click(function () {
   clearForm();
-  window.location.href = "lab11/login";
+  window.location.href = "login";
 });
 
 $("#signup").click(function () {
   clearForm();
-  window.location.href = "lab11/signup";
+  window.location.href = "signup";
 });
 
 $("#logout").click(function () {
   clearForm();
-  window.location.href = "lab11/logout";
+  window.location.href = "logout";
 });
 
 $("#editProfile").click(function () {
   clearForm();
-  window.location.href = "lab11/profile";
+  window.location.href = "profile";
 });
 
