@@ -15,11 +15,6 @@ from app.models.blogEntry import BlogEntry
 from app.models.authuser import AuthUser, Privateblog
 
 
-# @app.route('/')
-# def home():
-#     return "Flask says 'Hello world!'"
-
-
 @app.route('/crash')
 def crash():
     return 1/0
@@ -35,35 +30,16 @@ def db_connection():
         return '<h1>db is broken.</h1>' + str(e)
 
 
-
-
-# @app.route("/lab10/contacts")
-# @login_required
-# def lab10_db_contacts():
-#     contacts = []
-#    # db_contacts = Contact.query.all()
-#     db_contacts = PrivateContact.query.filter(
-#         PrivateContact.owner_id == current_user.id)
-
-#     contacts = list(map(lambda x: x.to_dict(), db_contacts))
-#     app.logger.debug("DB Contacts: " + str(contacts))
-
-#     return jsonify(contacts)
-
-
-
-
 @app.route("/blogentry")
-def lab11_db_blogentry():
+def db_blogentry():
     blogentry = []
-    db_blogentry = BlogEntry.query.all()
+    db_blogentry = Privateblog.query.all()
 
     blogentry = list(map(lambda x: x.to_dict(), db_blogentry))
     blogentry.sort(key=lambda x: x['id'])
     app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
-
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
@@ -103,13 +79,13 @@ def freeFan():
                     blogentry.update(**validated_dict)
             db.session.commit()
 
-        return lab11_db_blogentry()
+        return db_blogentry()
     return render_template('freeFan.html')
 
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
-def lab11_remove_blog():
-    app.logger.debug("LAB11 - REMOVE")
+def remove_blog():
+    app.logger.debug("REMOVE")
     if request.method == 'POST':
         result = request.form.to_dict()
         id_ = result.get('id', '')
@@ -121,7 +97,7 @@ def lab11_remove_blog():
         except Exception as ex:
             app.logger.debug(ex)
             raise
-    return lab11_db_blogentry()
+    return db_blogentry()
 
 
 
