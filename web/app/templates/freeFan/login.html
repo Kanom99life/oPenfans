@@ -13,7 +13,7 @@
    <form method="POST">
      <div class="field">
        <div class="control">
-         <input class="input is-large" type="email" name="email" placeholder="Your Email" autofocus="" >
+         <input class="input is-large" type="email" name="email" placeholder="Your Email" pattern=".+@opf\.com" title="Provide only a openFan email address" autofocus="" >
        </div>
      </div>
      <div class="field">
@@ -28,6 +28,13 @@
        </label>
      </div>
      <button class="button is-block is-info is-large is-fullwidth">Login</button>
+     <h2><span>or login with</span></h2>
+        <a class="button is-block is-danger is-large is-fullwidth" href="{{ url_for('google') }}">
+          <span class="icon is-medium">
+            <i class="fab fa-google"></i>
+          </span>
+          <span>Google</span>
+        </a>
    </form>
  </div>
 </div>

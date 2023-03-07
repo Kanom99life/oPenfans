@@ -15,7 +15,7 @@
 
   <script src="https://kit.fontawesome.com/87f04edde9.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/mytwitter.css">
+  <link rel="stylesheet" href="/static/css/openfan.css">
   <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
   <title>FreeFan</title>
   <link rel = "icon" href = "/static/img/heart.svg" type = "image/x-icon">
@@ -80,7 +80,7 @@
                   {% endif %}
                   
                   {% if not current_user.is_authenticated %}
-                  <button id="add_blog_notAuth" type="button" onclick="alert('You need to login to create post')" >What's on your mind?</button>
+                  <button id="add_blog_notAuth" type="button" onclick="alert('You need to login to create post')" >Welcome to openFan</button>
                   {% endif %}
                 </div>
                 <form id="addBlogBlog" hidden="hidden">

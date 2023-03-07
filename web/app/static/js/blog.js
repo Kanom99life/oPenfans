@@ -86,7 +86,6 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
                 <span class="tweet-username" id="name${id}">${name}</span>
-                (<span class="tweet-usertag"id="email${id}">${email}</span>)
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -134,7 +133,6 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
                 <span class="tweet-username" id="name${id}">${name}</span>
-                (<span class="tweet-usertag"id="email${id}">${email}</span>)
                 <span class="tweet-age" data-text="${dateMonthYear} (Edited ${edit_date} ago)"> · ${date} (edited) · <i class="fa-solid fa-earth-asia"></i> </span>
               </div>
               
@@ -316,6 +314,7 @@ $("#logout").click(function () {
 });
 
 $("#editProfile").click(function () {
+  
   clearForm();
   window.location.href = "profile";
 });
@@ -323,4 +322,9 @@ $("#editProfile").click(function () {
 
 $("#editBut").click(function () {
   clearForm();
+});
+
+$("#google-login").click(function () {
+  
+  window.location.href = "google/auth/";
 });

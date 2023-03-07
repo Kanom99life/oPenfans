@@ -1,3 +1,5 @@
+import secrets
+import string
 from flask import (jsonify, render_template,
                    request, url_for, flash, redirect)
 import json
@@ -5,15 +7,12 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.urls import url_parse
 from sqlalchemy.sql import text
 from flask_login import login_user, login_required, logout_user, current_user
-
 from app import app
 from app import db
 from app import login_manager
-
-
+from app import oauth
 from app.models.blogEntry import BlogEntry
 from app.models.authuser import AuthUser, Privateblog
-
 
 @app.route('/crash')
 def crash():
@@ -28,6 +27,53 @@ def db_connection():
         return '<h1>db works.</h1>'
     except Exception as e:
         return '<h1>db is broken.</h1>' + str(e)
+
+@app.route('/google/')
+def google():
+
+
+    oauth.register(
+        name='google',
+        client_id=app.config['GOOGLE_CLIENT_ID'],
+        client_secret=app.config['GOOGLE_CLIENT_SECRET'],
+        server_metadata_url=app.config['GOOGLE_DISCOVERY_URL'],
+        client_kwargs={
+            'scope': 'openid email profile'
+        }
+    )
+
+
+   # Redirect to google_auth function
+    redirect_uri = url_for('google_auth', _external=True)
+    return oauth.google.authorize_redirect(redirect_uri)
+
+@app.route('/google/auth/')
+def google_auth():
+    token = oauth.google.authorize_access_token()
+    app.logger.debug(str(token))
+
+
+    userinfo = token['userinfo']
+    app.logger.debug(" Google User " + str(userinfo))
+    email = userinfo['email']
+    user = AuthUser.query.filter_by(email=email).first()
+
+
+    if not user:
+        name = userinfo['given_name'] + " " + userinfo['family_name']
+        random_pass_len = 8
+        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+                          for i in range(random_pass_len))
+        picture = userinfo['picture']
+        new_user = AuthUser(email=email, name=name,
+                           password=generate_password_hash(
+                               password, method='sha256'),
+                           avatar_url=picture)
+        db.session.add(new_user)
+        db.session.commit()
+        user = AuthUser.query.filter_by(email=email).first()
+    login_user(user)
+    return redirect('/')
 
 
 @app.route("/blogentry")
@@ -104,7 +150,7 @@ def remove_blog():
 @app.route('/profile')
 @login_required
 def freeFan_profile():
-    return render_template('freeFan/profile.html')
+    return render_template('freeFan/profile.html', current_user=current_user)
 
 @app.route('/login', methods=('GET', 'POST'))
 def freeFan_login():
@@ -138,6 +184,10 @@ def freeFan_login():
 @app.route('/signup', methods=('GET', 'POST'))
 def freeFan_signup():
 
+    def fix_email_domain(email):
+        # function to fix email domain to @opf.com
+        return email.split('@')[0] + '@opf.com'
+
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
@@ -157,7 +207,11 @@ def freeFan_signup():
                 validated = False
                 break
             validated_dict[key] = value
-            # code to validate and add user to database goes here
+        
+        # fix email domain to @opf.com
+        validated_dict['email'] = fix_email_domain(validated_dict['email'])
+        
+        # code to validate and add user to database goes here
         app.logger.debug("validation done")
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
@@ -186,6 +240,7 @@ def freeFan_signup():
             db.session.commit()
 
         return redirect(url_for('freeFan_login'))
+    
     return render_template('freeFan/signup.html')
 
 
