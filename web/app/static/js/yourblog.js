@@ -4,7 +4,7 @@ var curr_name = $("#name").val();
 
 $(document).ready(function () {
     (function () {
-        $.getJSON("blogentry", blog_table); //user_blogentry
+        $.getJSON("user_blogentry", blog_table); //user_blogentry
     })();
 });
 
@@ -125,7 +125,7 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
         <div class="row">
     
           <div class="col-md-2 text-center">
-          <img src="${avatar_url}" id = "avatar_url${id}" class="tw-user-medium rounded-circle" >
+          <img src="${avatar_url}" id = "avatar_url${id}" class="tw-user-medium rounded-circle">
           </div>
     
           <div class="col-md-10">
@@ -222,7 +222,7 @@ function removeItem(id) {
   }
   
   // console.log("pass")
-  var url = "remove_blog"
+  var url = "remove_blog_profile"
   var formData = { 'id': id};
   $.post(url, formData, function (blog_data) {
     refresh_table(blog_data)
@@ -245,13 +245,6 @@ function prePopulateForm(id){
   $('#message').val(document.getElementById("message"+id).innerHTML)
   $('#entryid').val(id)
   toggleView()
-}
-
-
-function lastestPrePopulateForm(id){
-  $('#addBlogBlog')[0].reset();
-  $('#name').val(document.getElementById("name"+id).innerHTML);
-  $('#email').val(document.getElementById("email"+id).innerHTML);  
 }
 
 

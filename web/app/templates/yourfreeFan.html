@@ -26,9 +26,8 @@
     <div class="container">
       <div class="navbar-nav">
         <!--<a> Welcome, {{ current_user.name }} <i class="fa-solid fa-face-smile"></i></a>-->
-        {% if current_user.is_authenticated %}
-        <a class="nav-item nav-link" href="{{ url_for('userfreeFan') }}"><span class="oi oi-home"></span>{{ current_user.name }}</a>
-        {% endif %}
+      
+        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}"><span class="oi oi-home"></span>HOME</a>
         <!--<a class="nav-item nav-link" href="#"><span class="oi oi-bolt"></span> Moments</a>
         <a class="nav-item nav-link" href="#"><span class="oi oi-bell"></span> Notifications</a>
         <a class="nav-item nav-link" href="#"><span class="oi oi-envelope-open"></span> Messages</a>-->
@@ -37,7 +36,7 @@
       <form class="form-inline">
         
         <div class="box3">
-            {% if current_user.is_authenticated %}
+            
             <div class="dropdown" >
               <img src="{{ current_user.avatar_url }}" class="tw-user-small rounded-circle" onclick="showDropdownMenu(event)" width="52">
                   <div class="dropdown-menu" id ="dropdown_item">
@@ -53,11 +52,7 @@
                   </div>
            </div>
             
-            {% endif %}
-            {% if not current_user.is_authenticated %}
-            <button id="login" type="button">Login</button>
-            <button id="signup" type="button">Sign up</button>
-            {% endif %}
+            
          </div>
       </form>
     </div>
@@ -76,15 +71,13 @@
 
               <div class="col-md-12">
                 <div id="addBlog_display" class="container">
-                  {% if current_user.is_authenticated %}
-                  <button id="add_blog" type="button" >What's on your mind?</button>
-                  {% endif %}
                   
-                  {% if not current_user.is_authenticated %}
-                  <button id="add_blog_notAuth" type="button" onclick="alert('You need to login to create post')" >Welcome to openFan</button>
-                  {% endif %}
+                  <button id="add_blog" type="button" >What's on your mind?</button>
+                  
+                  
+    
                 </div>
-                <form id="addBlogBlog" hidden="hidden">
+                <form id="addBlogBlog" hidden="hidden" action="/yourblog">
                   {% if current_user.is_authenticated %}
                     <input type="hidden" id="name" name="name" value="{{current_user.name}}">
                     <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
@@ -106,7 +99,7 @@
       <div id="right_2" class="col-md-2"></div>
     </div>
   </div>
-  <script src="/static/js/blog.js"></script>
+  <script src="/static/js/yourblog.js"></script>
 </body>
 
 </html>

@@ -1,15 +1,15 @@
 {% extends "freeFan/base.html" %}
 {% block content %}
 <div class="column is-4 is-offset-4">
- <h3 class="title">Login</h3>
+  {% with messages = get_flashed_messages() %}
+  {% if messages %}
+  <div class="notification is-danger">
+    {{ messages[0] }}
+  </div>
+  {% endif %}
+  {% endwith %}
  <div class="box">
-   {% with messages = get_flashed_messages() %}
-   {% if messages %}
-   <div class="notification is-danger">
-     {{ messages[0] }}
-   </div>
-   {% endif %}
-   {% endwith %}
+   <h3 class="title">Login</h3>
    <form method="POST">
      <div class="field">
        <div class="control">
@@ -27,15 +27,26 @@
          Remember me
        </label>
      </div>
+
      <button class="button is-block is-info is-large is-fullwidth">Login</button>
+
      <h2><span>or login with</span></h2>
-        <a class="button is-block is-danger is-large is-fullwidth" href="{{ url_for('google') }}">
-          <span class="icon is-medium">
-            <i class="fab fa-google"></i>
-          </span>
-          <span>Google</span>
-        </a>
+
+      <a class="button is-google is-large" href="{{ url_for('google') }}">
+        <span class="icon is-medium">
+          <i class="fab fa-google"></i>
+        </span>
+        <span>Google</span>
+      </a>
+      <a class="button is-facebook is-large" href="{{ url_for('facebook') }}">
+        <span class="icon is-medium">
+          <i class="fab fa-facebook"></i>
+        </span>
+        <span>Facebook</span>
+      </a>
+      <h4><span>Not a member? <a href="{{ url_for('freeFan_signup') }}" style="color: #3273dc;">Register now</a></span></h4>
    </form>
+   
  </div>
 </div>
 {% endblock %}

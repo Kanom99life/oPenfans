@@ -1,5 +1,6 @@
 import secrets
 import string
+import os
 from flask import (jsonify, render_template,
                    request, url_for, flash, redirect)
 import json
@@ -75,6 +76,52 @@ def google_auth():
     login_user(user)
     return redirect('/')
 
+@app.route('/facebook/')
+def facebook():
+    # Facebook Oauth Config
+    FACEBOOK_CLIENT_ID = os.environ.get('FACEBOOK_CLIENT_ID')
+    FACEBOOK_CLIENT_SECRET = os.environ.get('FACEBOOK_CLIENT_SECRET')
+    oauth.register(
+        name='facebook',
+        client_id=FACEBOOK_CLIENT_ID,
+        client_secret=FACEBOOK_CLIENT_SECRET,
+        access_token_url='https://graph.facebook.com/oauth/access_token',
+        access_token_params=None,
+        authorize_url='https://www.facebook.com/dialog/oauth',
+        authorize_params=None,
+        api_base_url='https://graph.facebook.com/',
+        client_kwargs={'scope': 'email'},
+    )
+    redirect_uri = url_for('facebook_auth', _external=True)
+    return oauth.facebook.authorize_redirect(redirect_uri)
+ 
+@app.route('/facebook/auth/')
+def facebook_auth():
+    token = oauth.facebook.authorize_access_token()
+    resp = oauth.facebook.get(
+        'https://graph.facebook.com/me?fields=id,name,email,picture{url}')
+    profile = resp.json()
+    print("Facebook User ", profile)
+
+    email = profile['email']
+    user = AuthUser.query.filter_by(email=email).first()
+
+    if not user:
+        name = profile['name']
+        random_pass_len = 8
+        password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
+                          for i in range(random_pass_len))
+        picture = profile['picture']['data']['url']
+        new_user = AuthUser(email=email, name=name,
+                           password=generate_password_hash(
+                               password, method='sha256'),
+                           avatar_url=picture)
+        db.session.add(new_user)
+        db.session.commit()
+        user = AuthUser.query.filter_by(email=email).first()
+    login_user(user)
+    return redirect('/')
+
 
 @app.route("/blogentry")
 def db_blogentry():
@@ -86,6 +133,20 @@ def db_blogentry():
     app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
+
+@app.route("/user_blogentry")
+def db_user_blogentry():
+    blogentry = []
+    db_user_blogentry = Privateblog.query.filter(Privateblog.owner_id == current_user.id)
+
+    blogentry = list(map(lambda x: x.to_dict(), db_user_blogentry))
+    blogentry.sort(key=lambda x: x['id'])
+    app.logger.debug("DB BlogEntry: " + str(blogentry))
+
+    return jsonify(blogentry)
+
+
+
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
@@ -128,6 +189,46 @@ def freeFan():
         return db_blogentry()
     return render_template('freeFan.html')
 
+@app.route('/yourblog', methods=('GET', 'POST'))
+def userfreeFan():
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        app.logger.debug(str(result))
+        id_ = result.get('id', '')
+        validated = True
+        validated_dict = dict()
+        valid_keys = ['name', 'message', 'email', 'avatar_url']
+
+        # validate the input
+        for key in result:
+            app.logger.debug(key, result[key])
+            # screen of unrelated inputs
+            if key not in valid_keys:
+                continue
+
+            value = result[key].strip()
+            if not value or value == 'undefined':
+                validated = False
+                break
+            validated_dict[key] = value
+
+        if validated:
+            app.logger.debug('validated dict: ' + str(validated_dict))
+            # if there is no id: create a new contact entry
+            if not id_:
+                validated_dict['owner_id'] = current_user.id
+                entry = Privateblog(**validated_dict)
+                app.logger.debug(str(entry))
+                db.session.add(entry)
+            # if there is an id already: update the contact entry
+            else:
+                blogentry = Privateblog.query.get(id_)
+                if blogentry.owner_id == current_user.id:
+                    blogentry.update(**validated_dict)
+            db.session.commit()
+
+        return db_user_blogentry()
+    return render_template('yourfreeFan.html')
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():
@@ -146,6 +247,21 @@ def remove_blog():
     return db_blogentry()
 
 
+@app.route('/remove_blog_profile', methods=('GET', 'POST'))
+def remove_blog_profile():
+    app.logger.debug("REMOVE")
+    if request.method == 'POST':
+        result = request.form.to_dict()
+        id_ = result.get('id', '')
+        try:
+            entry = Privateblog.query.get(id_)
+            if entry.owner_id == current_user.id:
+                db.session.delete(entry)
+            db.session.commit()
+        except Exception as ex:
+            app.logger.debug(ex)
+            raise
+    return db_user_blogentry()
 
 @app.route('/profile')
 @login_required
