@@ -30,10 +30,10 @@
  <section class="hero is-primary is-fullheight" >
    <div class="hero-head" style="background-color: #cbe4f4">
   {% if current_user.is_authenticated %}
-	<nav class="navbar">
+	<nav class="navbar" >
        <div class="container ">
-         <div class="navbar-brand">
-           <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenuHeroA">
+         <div class="navbar-brand" >
+           <a role="button" class="navbar-burger" aria-label="menu" aria-expanded="false" data-target="navbarMenuHeroA" >
              <span aria-hidden="true"></span>
              <span aria-hidden="true"></span>
              <span aria-hidden="true"></span>
@@ -46,7 +46,7 @@
              </a>
              
              <a href="{{ url_for('freeFan_profile') }}" class="navbar-item" id ="navItem">
-               Profile
+              {{ current_user.name }}
              </a>
              
            </div>

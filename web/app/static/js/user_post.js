@@ -2,10 +2,10 @@ var lastestID = 0;
 var curr_email = $("#curr_email").val();
 var curr_name = $("#name").val();
 
-
 $(document).ready(function () {
     (function () {
-        $.getJSON("blogentry", blog_table); //user_blogentry
+       
+        $.getJSON("/select_blogentry/" + curr_name, blog_table); //user_blogentry
     })();
 });
 
@@ -47,8 +47,7 @@ function clearForm() {
 
 function blog_table(blog_data) {
     const data = { data: blog_data }
-    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url}) => {
-        url = "/user_posts/";
+    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url }) => {
         lastestID = id;
         let date = formatTime(date_created);
         let dateEdit = formatTime(date_update);
@@ -58,9 +57,9 @@ function blog_table(blog_data) {
         var editDate = new Date(date_update);
 
         if(oldDate.getUTCSeconds() === editDate.getUTCSeconds()){
-          return currentBlog(id, name, message, email, date, DMY, avatar_url, url);
+          return currentBlog(id, name, message, email, date, DMY, avatar_url);
         }else{
-          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url);
+          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url);
         }    
     };
 
@@ -87,8 +86,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
-                <a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>
+                <span class="tweet-username" id="name${id}">${name}</span>
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -128,14 +126,14 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
         <div class="row">
     
           <div class="col-md-2 text-center">
-          <img src="${avatar_url}" id = "avatar_url${id}" class="tw-user-medium rounded-circle" >
+          <img src="${avatar_url}" id = "avatar_url${id}" class="tw-user-medium rounded-circle">
           </div>
     
           <div class="col-md-10">
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>
+                <span class="tweet-username" id="name${id}">${name}</span>
                 <span class="tweet-age" data-text="${dateMonthYear} (Edited ${edit_date} ago)"> · ${date} (edited) · <i class="fa-solid fa-earth-asia"></i> </span>
               </div>
               
@@ -225,7 +223,7 @@ function removeItem(id) {
   }
   
   // console.log("pass")
-  var url = "remove_blog"
+  var url = "remove_blog_profile"
   var formData = { 'id': id};
   $.post(url, formData, function (blog_data) {
     refresh_table(blog_data)
@@ -248,13 +246,6 @@ function prePopulateForm(id){
   $('#message').val(document.getElementById("message"+id).innerHTML)
   $('#entryid').val(id)
   toggleView()
-}
-
-
-function lastestPrePopulateForm(id){
-  $('#addBlogBlog')[0].reset();
-  $('#name').val(document.getElementById("name"+id).innerHTML);
-  $('#email').val(document.getElementById("email"+id).innerHTML);  
 }
 
 

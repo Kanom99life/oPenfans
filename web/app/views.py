@@ -145,8 +145,17 @@ def db_user_blogentry():
 
     return jsonify(blogentry)
 
+@app.route("/select_blogentry/<string:username>")
+def db_select_blogentry(username):
+    blogentry = []
+    user = BlogEntry.query.filter_by(name=username).first_or_404()
+    db_select_blogentry = Privateblog.query.filter_by(owner_id=user.id).all()
 
+    blogentry = list(map(lambda x: x.to_dict(), db_select_blogentry))
+    blogentry.sort(key=lambda x: x['id'])
+    app.logger.debug("DB BlogEntry: " + str(blogentry))
 
+    return jsonify(blogentry)
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
@@ -173,13 +182,13 @@ def freeFan():
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new contact entry
+            # if there is no id: create a new blog entry
             if not id_:
                 validated_dict['owner_id'] = current_user.id
                 entry = Privateblog(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
-            # if there is an id already: update the contact entry
+            # if there is an id already: update the blog entry
             else:
                 blogentry = Privateblog.query.get(id_)
                 if blogentry.owner_id == current_user.id:
@@ -214,13 +223,13 @@ def userfreeFan():
 
         if validated:
             app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new contact entry
+            # if there is no id: create a new blog entry
             if not id_:
                 validated_dict['owner_id'] = current_user.id
                 entry = Privateblog(**validated_dict)
                 app.logger.debug(str(entry))
                 db.session.add(entry)
-            # if there is an id already: update the contact entry
+            # if there is an id already: update the blog entry
             else:
                 blogentry = Privateblog.query.get(id_)
                 if blogentry.owner_id == current_user.id:
@@ -229,6 +238,14 @@ def userfreeFan():
 
         return db_user_blogentry()
     return render_template('yourfreeFan.html')
+
+@app.route("/user_posts/<string:username>")
+def user_posts(username):
+    user = BlogEntry.query.filter_by(name=username).first_or_404()
+
+    user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
+
+    return render_template('freeFan/user_post.html', user=user, posts=user_posts)
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():

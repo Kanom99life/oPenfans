@@ -1,3 +1,4 @@
+
 <!doctype html>
 <html lang="en">
 
@@ -26,8 +27,10 @@
     <div class="container">
       <div class="navbar-nav">
         <!--<a> Welcome, {{ current_user.name }} <i class="fa-solid fa-face-smile"></i></a>-->
-      
-        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">openFan</a>
+        {% if current_user.is_authenticated %}
+        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">{{ user.name }}</a>
+        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">{{ user.message }}</a>
+        {% endif %}
         <!--<a class="nav-item nav-link" href="#"><span class="oi oi-bolt"></span> Moments</a>
         <a class="nav-item nav-link" href="#"><span class="oi oi-bell"></span> Notifications</a>
         <a class="nav-item nav-link" href="#"><span class="oi oi-envelope-open"></span> Messages</a>-->
@@ -36,7 +39,7 @@
       <form class="form-inline">
         
         <div class="box3">
-            
+            {% if current_user.is_authenticated %}
             <div class="dropdown" >
               <img src="{{ current_user.avatar_url }}" class="tw-user-small rounded-circle" onclick="showDropdownMenu(event)" width="52">
                   <div class="dropdown-menu" id ="dropdown_item">
@@ -55,12 +58,16 @@
                   </div>
            </div>
             
-            
+            {% endif %}
+            {% if not current_user.is_authenticated %}
+            <button id="login" type="button">Login</button>
+            <button id="signup" type="button">Sign up</button>
+            {% endif %}
          </div>
       </form>
     </div>
   </nav>
-  
+
   <div class="container">
     <div class="row">
       <div id="left_2" class="col-md-2"></div>
@@ -74,17 +81,19 @@
 
               <div class="col-md-12">
                 <div id="addBlog_display" class="container">
-                  
-                  <button id="add_blog" type="button" >What's on your mind?</button>
-                  
-                  
-    
-                </div>
-                <form id="addBlogBlog" hidden="hidden" action="/yourblog">
                   {% if current_user.is_authenticated %}
-                    <input type="hidden" id="name" name="name" value="{{current_user.name}}">
-                    <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
-                    <input type="hidden" id="avatar_url" name="avatar_url" value="{{current_user.avatar_url}}">
+                  <button id="add_blog" type="button" >What's on your mind?</button>
+                  {% endif %}
+                  
+                  {% if not current_user.is_authenticated %}
+                  <button id="add_blog_notAuth" type="button" onclick="alert('You need to login to create post')" >Welcome to openFan</button>
+                  {% endif %}
+                </div>
+                <form id="addBlogBlog" hidden="hidden">
+                  {% if current_user.is_authenticated %}
+                    <input type="text" id="name" name="name" value="{{user.name}}">
+                    <input type="test" id="curr_email" name="email" value="{{user.email}}">
+                    <input type="hidden" id="avatar_url" name="avatar_url" value="{{user.avatar_url}}">
                     <textarea type="text" id="message" name="message" maxlength="280" placeholder="message" required></textarea>
                     <input type="hidden" id="entryid" name="id" value="">
                     <input type="submit" id="submit_form" name="submit" value="Submit">
@@ -102,7 +111,32 @@
       <div id="right_2" class="col-md-2"></div>
     </div>
   </div>
-  <script src="/static/js/yourblog.js"></script>
+  <script src="/static/js/user_post.js"></script>
 </body>
 
 </html>
+
+<!--{% extends "freeFan/base.html" %}
+
+
+{% block content %}
+<h2>{{ user.name }}'s Profile</h2>
+<p>Email: {{ user.email }}</p>
+<img src="{{ user.avatar_url }}" alt="User Avatar">
+
+<h3>{{ user.name }}'s Posts</h3>
+
+  <ul>
+    
+    <div class="post">
+      <h2>{{ posts.title }}</h2>
+      <p>{{ posts.content }}</p>
+      <p>Posted by: {{ user.name }}</p>
+    </div>
+     
+  </ul>
+
+  <p>{{ user.name }} has not posted anything yet.</p>
+
+
+{% endblock %}-->
