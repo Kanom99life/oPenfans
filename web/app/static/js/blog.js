@@ -91,7 +91,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
                 <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
                 ${curr_email === email?
                 `<a class="tweet-username" id="name${id}" href="${curr_url}">${name}</a>`:
-                `<a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>`}
+                `<a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>`}
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -140,7 +140,7 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
                 ${curr_email === email?
                   `<a class="tweet-username" id="name${id}" href="${curr_url}">${name}</a>`:
-                  `<a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>`}
+                  `<a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>`}
                 <span class="tweet-age" data-text="${dateMonthYear} (Edited ${edit_date})"> · ${date} (edited) · <i class="fa-solid fa-earth-asia"></i> </span>
               </div>
               

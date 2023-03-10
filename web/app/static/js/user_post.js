@@ -4,7 +4,7 @@ var curr_name = $("#name").val();
 
 $(document).ready(function () {
     (function () {
-      $.getJSON("/select_blogentry/"+curr_name, blog_table); //user_blogentry
+      $.getJSON("/select_blogentry/"+curr_email, blog_table); //user_blogentry
      // $.getJSON("/user_blogentry", blog_table); //user_blogentry
        
     })();
@@ -88,7 +88,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>
+                <a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 

@@ -122,15 +122,18 @@ def facebook_auth():
     login_user(user)
     return redirect('/')
 
-
 @app.route("/blogentry")
 def db_blogentry():
     blogentry = []
     db_blogentry = Privateblog.query.all()
 
-    blogentry = list(map(lambda x: x.to_dict(), db_blogentry))
-    blogentry.sort(key=lambda x: x['id'])
-    app.logger.debug("DB BlogEntry: " + str(blogentry))
+    for i in db_blogentry:
+        app.logger.debug(i.to_dict())
+        owner_id = i.to_dict()["owner_id"]
+        app.logger.debug(owner_id)
+        user_data = AuthUser.query.get(owner_id)
+        user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+        blogentry.append({**user_dict, **i.to_dict()})
 
     return jsonify(blogentry)
 
@@ -138,27 +141,37 @@ def db_blogentry():
 def db_user_blogentry():
     blogentry = []
     db_user_blogentry = Privateblog.query.filter(Privateblog.owner_id == current_user.id)
-
-    blogentry = list(map(lambda x: x.to_dict(), db_user_blogentry))
-    blogentry.sort(key=lambda x: x['id'])
+    
+    for i in db_user_blogentry:
+        app.logger.debug(i.to_dict())
+        owner_id = i.to_dict()["owner_id"]
+        app.logger.debug(owner_id)
+        user_data = AuthUser.query.get(owner_id)
+        user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+        blogentry.append({**user_dict, **i.to_dict()})
     app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
 
-@app.route("/select_blogentry/<string:username>")
-def db_select_blogentry(username):
+@app.route("/select_blogentry/<string:blog_email>")
+def db_select_blogentry(blog_email):
     blogentry = []
-    user = BlogEntry.query.filter_by(name=username).first_or_404()
-    db_select_blogentry = Privateblog.query.filter_by(name=user.name).all()
-
-    blogentry = list(map(lambda x: x.to_dict(), db_select_blogentry))
-    blogentry.sort(key=lambda x: x['id'])
+    user = AuthUser.query.filter_by(email=blog_email).first_or_404()
+    db_select_blogentry = Privateblog.query.filter_by(owner_id=user.id).all()
+    
+    for i in db_select_blogentry:
+        app.logger.debug(i.to_dict())
+        owner_id = i.to_dict()["owner_id"]
+        app.logger.debug(owner_id)
+        user_data = AuthUser.query.get(owner_id)
+        user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+        blogentry.append({**user_dict, **i.to_dict(), 'email': user.email})
     app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
+
 
 @app.route('/', methods=('GET', 'POST'))
-
 def freeFan():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -166,7 +179,7 @@ def freeFan():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email', 'avatar_url']
+        valid_keys = ['message', 'avatar_url']
 
         # validate the input
         for key in result:
@@ -208,7 +221,7 @@ def userfreeFan():
         id_ = result.get('id', '')
         validated = True
         validated_dict = dict()
-        valid_keys = ['name', 'message', 'email', 'avatar_url']
+        valid_keys = ['message', 'avatar_url']
 
         # validate the input
         for key in result:
@@ -241,13 +254,13 @@ def userfreeFan():
         return db_user_blogentry()
     return render_template('yourfreeFan.html')
 
-@app.route("/user_posts/<string:username>")
+@app.route("/user_posts/<string:blog_email>")
 @login_required
-def user_posts(username):
-    user = BlogEntry.query.filter_by(name=username).first_or_404()
+def user_posts(blog_email):
+    user = AuthUser.query.filter_by(email=blog_email).first_or_404()
 
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
-
+    
     return render_template('user_post.html', user=user, posts=user_posts)
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
