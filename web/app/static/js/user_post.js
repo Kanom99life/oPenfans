@@ -4,8 +4,9 @@ var curr_name = $("#name").val();
 
 $(document).ready(function () {
     (function () {
+      $.getJSON("/select_blogentry/"+curr_name, blog_table); //user_blogentry
+     // $.getJSON("/user_blogentry", blog_table); //user_blogentry
        
-        $.getJSON("/select_blogentry/" + curr_name, blog_table); //user_blogentry
     })();
 });
 
@@ -293,13 +294,13 @@ $("#signup").click(function () {
 
 $("#logout").click(function () {
   clearForm();
-  window.location.href = "logout";
+  window.location.href = "/logout";
 });
 
 $("#editProfile").click(function () {
   
   clearForm();
-  window.location.href = "profile";
+  window.location.href = "/profile";
 });
 
 

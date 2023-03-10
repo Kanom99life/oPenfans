@@ -149,7 +149,7 @@ def db_user_blogentry():
 def db_select_blogentry(username):
     blogentry = []
     user = BlogEntry.query.filter_by(name=username).first_or_404()
-    db_select_blogentry = Privateblog.query.filter_by(owner_id=user.id).all()
+    db_select_blogentry = Privateblog.query.filter_by(name=user.name).all()
 
     blogentry = list(map(lambda x: x.to_dict(), db_select_blogentry))
     blogentry.sort(key=lambda x: x['id'])
@@ -158,6 +158,7 @@ def db_select_blogentry(username):
     return jsonify(blogentry)
 
 @app.route('/', methods=('GET', 'POST'))
+
 def freeFan():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -199,6 +200,7 @@ def freeFan():
     return render_template('freeFan.html')
 
 @app.route('/yourblog', methods=('GET', 'POST'))
+@login_required
 def userfreeFan():
     if request.method == 'POST':
         result = request.form.to_dict()
@@ -240,12 +242,13 @@ def userfreeFan():
     return render_template('yourfreeFan.html')
 
 @app.route("/user_posts/<string:username>")
+@login_required
 def user_posts(username):
     user = BlogEntry.query.filter_by(name=username).first_or_404()
 
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
 
-    return render_template('freeFan/user_post.html', user=user, posts=user_posts)
+    return render_template('user_post.html', user=user, posts=user_posts)
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():
