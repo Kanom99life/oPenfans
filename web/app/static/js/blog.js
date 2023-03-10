@@ -49,6 +49,7 @@ function blog_table(blog_data) {
     const data = { data: blog_data }
     const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url}) => {
         url = "/user_posts/";
+        curr_url ="/yourblog";
         lastestID = id;
         let date = formatTime(date_created);
         let dateEdit = formatTime(date_update);
@@ -74,7 +75,7 @@ function blog_table(blog_data) {
 };
 
 
-function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url){
+function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url){
   return `
       <div class="tweet">
         <div class="row">
@@ -88,7 +89,9 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
                 <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
-                <a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>
+                ${curr_email === email?
+                `<a class="tweet-username" id="name${id}" href="${curr_url}">${name}</a>`:
+                `<a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>`}
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -122,7 +125,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 };
 
 
-function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url){
+function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url){
   return `
       <div class="tweet">
         <div class="row">
@@ -135,8 +138,10 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>
-                <span class="tweet-age" data-text="${dateMonthYear} (Edited ${edit_date} ago)"> · ${date} (edited) · <i class="fa-solid fa-earth-asia"></i> </span>
+                ${curr_email === email?
+                  `<a class="tweet-username" id="name${id}" href="${curr_url}">${name}</a>`:
+                  `<a class="tweet-username" id="name${id}" href="${url}${name}">${name}</a>`}
+                <span class="tweet-age" data-text="${dateMonthYear} (Edited ${edit_date})"> · ${date} (edited) · <i class="fa-solid fa-earth-asia"></i> </span>
               </div>
               
               <div class="tweet-arrow">
@@ -178,13 +183,13 @@ function formatTime(date_created) {
 
     let result;
     if (diff >= 60 && diff < 1440) {
-        result = Math.round(diff / 60) + " hours";
+        result = Math.round(diff / 60) + " hours ago";
     } else if (diff >= 1440) {
         result = new Date(date_created).toLocaleDateString().split(",")[0];
     } else if (diff <= 1) {
         result = "now";
     } else {
-        result = diff + " minutes";
+        result = diff + " minutes ago";
     }
     return result;
 }
