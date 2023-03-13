@@ -11,15 +11,18 @@ class BlogEntry(db.Model, SerializerMixin):
     date_created = db.Column(db.DateTime)
     date_update = db.Column(db.DateTime)
     avatar_url = db.Column(db.String(300))
+    img = db.Column(db.LargeBinary, nullable=True)
     
-    def __init__(self, message, avatar_url):
+    def __init__(self, message, avatar_url, img=None):
         self.message = message   
         self.date_created = datetime.now()
         self.date_update = datetime.now()
         self.avatar_url = avatar_url
+        self.img = img
 
         
-    def update(self, message, avatar_url):
+    def update(self, message, avatar_url, img=None):
         self.message = message
         self.date_update = datetime.now()
         self.avatar_url = avatar_url
+        self.img = img

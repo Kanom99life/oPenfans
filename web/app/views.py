@@ -5,15 +5,23 @@ from flask import (jsonify, render_template,
                    request, url_for, flash, redirect)
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
 from werkzeug.urls import url_parse
 from sqlalchemy.sql import text
 from flask_login import login_user, login_required, logout_user, current_user
-from app import app
+from app import app, images
 from app import db
 from app import login_manager
 from app import oauth
 from app.models.blogEntry import BlogEntry
 from app.models.authuser import AuthUser, Privateblog
+from app.forms import forms
+import base64
+
+UPLOAD_FOLDER = './app/static/uploads'
+ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
+
+app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
 
 @app.route('/crash')
 def crash():
@@ -31,7 +39,6 @@ def db_connection():
 
 @app.route('/google/')
 def google():
-
 
     oauth.register(
         name='google',
@@ -173,48 +180,30 @@ def db_select_blogentry(blog_email):
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
-    if request.method == 'POST':
-        result = request.form.to_dict()
-        app.logger.debug(str(result))
-        id_ = result.get('id', '')
-        validated = True
-        validated_dict = dict()
-        valid_keys = ['message', 'avatar_url']
-
-        # validate the input
-        for key in result:
-            app.logger.debug(key, result[key])
-            # screen of unrelated inputs
-            if key not in valid_keys:
-                continue
-
-            value = result[key].strip()
-            if not value or value == 'undefined':
-                validated = False
-                break
-            validated_dict[key] = value
-
-        if validated:
-            app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new blog entry
-            if not id_:
-                validated_dict['owner_id'] = current_user.id
-                entry = Privateblog(**validated_dict)
-                app.logger.debug(str(entry))
-                db.session.add(entry)
-            # if there is an id already: update the blog entry
-            else:
-                blogentry = Privateblog.query.get(id_)
-                if blogentry.owner_id == current_user.id:
-                    blogentry.update(**validated_dict)
-            db.session.commit()
-
+    form = forms.BlogForm()
+    if form.validate_on_submit():
+        id_ = form.entryid.data
+        message = form.message.data
+        pic = form.image.data
+        pic_string = None
+        if pic:
+            pic_string = base64.b64encode(pic.read())
+        if not id_:
+            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=pic_string, owner_id=current_user.id)
+            app.logger.debug(str(entry))
+            db.session.add(entry)
+        else:
+            blogentry = Privateblog.query.get(id_)
+            if blogentry.owner_id == current_user.id:
+                blogentry.update(message=message, avatar_url=current_user.avatar_url,img=pic_string, owner_id=current_user.id)
+        db.session.commit()
         return db_blogentry()
-    return render_template('freeFan.html')
+    return render_template('freeFan.html', form=form)
 
 @app.route('/yourblog', methods=('GET', 'POST'))
 @login_required
 def userfreeFan():
+    form = forms.BlogForm()
     if request.method == 'POST':
         result = request.form.to_dict()
         app.logger.debug(str(result))
@@ -252,16 +241,17 @@ def userfreeFan():
             db.session.commit()
 
         return db_user_blogentry()
-    return render_template('yourfreeFan.html')
+    return render_template('yourfreeFan.html', form=form)
 
 @app.route("/user_posts/<string:blog_email>")
 @login_required
 def user_posts(blog_email):
+    form = forms.BlogForm()
     user = AuthUser.query.filter_by(email=blog_email).first_or_404()
 
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
     
-    return render_template('user_post.html', user=user, posts=user_posts)
+    return render_template('user_post.html', user=user, posts=user_posts, form=form)
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():

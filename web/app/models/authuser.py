@@ -23,6 +23,6 @@ class AuthUser(db.Model, UserMixin):
 class Privateblog(BlogEntry, UserMixin, SerializerMixin):
     owner_id = db.Column(db.Integer, db.ForeignKey('auth_users.id'))
 
-    def __init__(self, message,avatar_url, owner_id):
-        super().__init__(message, avatar_url)
+    def __init__(self, message,avatar_url, owner_id, img=None):
+        super().__init__(message, avatar_url, img)
         self.owner_id = owner_id

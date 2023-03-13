@@ -14,27 +14,43 @@ $("#addBlogBlog").submit(function (event) {
     event.preventDefault();
 
     // pack the inputs into a dictionary
-    var formData = {};
-    $(":input").each(function () {
-        var key = $(this).attr('name');
-        var val = $(this).val();
+    const formData = new FormData();
 
-        if (key != 'submit') {
-            formData[key] = val;
+    $("#addBlogBlog :input").each(function () {
+      var key = $(this).attr('name');
+      var val = $(this).val();
+
+      if(key === 'image'){
+        var files = $(this)[0].files[0];
+        formData.append('image', files);
+      }
+
+        if (key != 'submit' && key != 'image') {
+            formData.append(`${key}`,val);
         }
 
     });
+
+    for (let obj of formData) {
+      console.log(obj);
+    }
 
     var $form = $(this);
     var url = $form.attr("action");
 
     // make a POST call to the back end w/ a callback to refresh the table
-    $.post(url, formData, function (blog_data) {
+    $.ajax({
+      url: url,
+      type: 'post',
+      data: formData,
+      contentType: false,
+      processData: false,
+      success: function(blog_data){
         clearForm();
         refresh_table(blog_data)
         toggleView()
-
-    });
+      },
+  });
 });
 
 
@@ -57,7 +73,7 @@ function blog_table(blog_data) {
         var editDate = new Date(date_update);
 
         if(oldDate.getUTCSeconds() === editDate.getUTCSeconds()){
-          return currentBlog(id, name, message, email, date, DMY, avatar_url, url);
+          return currentBlog(id, name, message, email, date, DMY, avatar_url, url, img);
         }else{
           return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url);
         }    
@@ -73,7 +89,7 @@ function blog_table(blog_data) {
 };
 
 
-function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url){
+function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url,img){
   return `
       <div class="tweet">
         <div class="row">
@@ -86,7 +102,8 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <a class="tweet-username" id="name${id}" href="${url}">${name}</a>
+                <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
+                <a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -113,11 +130,16 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
             </div>
     
               <div class="tweet-text" id="message${id}">${message}</div>
-
+              ${ img ? 
+              `<div class="tweet-text">
+                <img style="max-width: 75%" src="data:image/jpeg;base64,${img}" />
+              </div>` : ``
+              }
           </div>
         </div>
       </div>`;
 };
+
 
 
 function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url, url){

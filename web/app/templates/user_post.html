@@ -71,18 +71,28 @@
       <div id="left_2" class="col-md-2"></div>
       <div id="center_8" class="col-md-8">
         <div class="content-box">
-                <form id="addBlogBlog" hidden="hidden">
-                  {% if current_user.is_authenticated %}
-                    <input type="text" id="name" name="name" value="{{user.name}}">
-                    <input type="test" id="curr_email" name="email" value="{{user.email}}">
-                    <input type="hidden" id="avatar_url" name="avatar_url" value="{{user.avatar_url}}">
-                    <textarea type="text" id="message" name="message" maxlength="280" placeholder="message" required></textarea>
-                    <input type="hidden" id="entryid" name="id" value="">
+                <input type="hidden" id="curr_email" name="email" value="{{user.email}}">
+                <form id="addBlogBlog" hidden="hidden" enctype="multipart/form-data">
+                    {{ form.csrf_token }}
+                    {% if current_user.is_authenticated %}
+                      {{ form.entryid()}}
+                      {{ form.message()}}
+                      {% if form.message.errors %}
+                        {% for error in form.message.errors %}
+                          {{ error }}
+                        {% endfor %}
+                      {% endif %}
+                      {{ form.image(accept_="image/*") }}
+                      {% if form.image.errors %}
+                        {% for error in form.image.errors %}
+                          {{ error }}
+                        {% endfor %}
+                      {% endif %}
+                    {% endif %}
                     <input type="submit" id="submit_form" name="submit" value="Submit">
                     <button id="clear_form" type="button">Clear</button>
                     <button id="cancel_form" type="button">Cancel</button>
                   </form>
-               {% endif %}
               </div>
               <!-- <div class="col-md-1"></div> -->
             

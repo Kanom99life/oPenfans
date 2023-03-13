@@ -5,7 +5,14 @@ from werkzeug.debug import DebuggedApplication
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from authlib.integrations.flask_client import OAuth
+from flask_uploads import UploadSet, IMAGES, configure_uploads
+
+
+
 app = Flask(__name__, static_folder='static')
+app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/uploads'
+images = UploadSet('photos', IMAGES)
+configure_uploads(app, images)
 
 # this DEBUG config here will be overridden by FLASK_DEBUG shell environmentapp.config['DEBUG'] = True 
 app.config['DEBUG'] = True
