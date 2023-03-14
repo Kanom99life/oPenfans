@@ -76,7 +76,7 @@ function blog_table(blog_data) {
         if(oldDate.getUTCSeconds() === editDate.getUTCSeconds()){
           return currentBlog(id, name, message, email, date, DMY, avatar_url, url,img);
         }else{
-          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url);
+          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url, img);
         }    
     };
 
@@ -133,10 +133,10 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
     
               <div class="tweet-text" id="message${id}">${message}</div>
               ${ img ? 
-              `<div class="tweet-text">
-                <img style="max-width: 75%" src="data:image/jpeg;base64,${img}" />
-              </div>` : ``
-              }
+                `<div class="tweet-text">
+                  <img style="max-width: 75%" src="/images/${img}" />
+                </div>` : ``
+                }
           </div>
         </div>
       </div>`;
@@ -144,7 +144,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 
 
 
-function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url){
+function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url, img){
   console.log(email)
   return `
       <div class="tweet">
@@ -185,7 +185,11 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
             </div>
     
               <div class="tweet-text" id="message${id}">${message}</div>
-
+              ${ img ? 
+                `<div class="tweet-text">
+                  <img style="max-width: 75%" src="/images/${img}" />
+                </div>` : ``
+                }
           </div>
         </div>
       </div>`;

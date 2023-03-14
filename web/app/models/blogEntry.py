@@ -10,7 +10,7 @@ class BlogEntry(db.Model, SerializerMixin):
     date_created = db.Column(db.DateTime)
     date_update = db.Column(db.DateTime)
     avatar_url = db.Column(db.String(300))
-    img = db.Column(db.LargeBinary, nullable=True)
+    img = db.Column(db.String(1000), nullable=True)
     
     def __init__(self, message, avatar_url, img=None):
         self.message = message   

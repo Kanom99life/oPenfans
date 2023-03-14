@@ -2,7 +2,7 @@ import secrets
 import string
 import os
 from flask import (jsonify, render_template,
-                   request, url_for, flash, redirect)
+                   request, url_for, flash, redirect, send_from_directory)
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -16,9 +16,9 @@ from app import oauth
 from app.models.blogEntry import BlogEntry
 from app.models.authuser import AuthUser, Privateblog
 from app.forms import forms
-import base64
+#import base64
 
-UPLOAD_FOLDER = './app/static/uploads'
+UPLOAD_FOLDER = 'app/static/uploads'
 ALLOWED_EXTENSIONS = {'txt', 'pdf', 'png', 'jpg', 'jpeg', 'gif'}
 
 app.config['UPLOAD_FOLDER'] = UPLOAD_FOLDER
@@ -68,7 +68,10 @@ def google_auth():
 
 
     if not user:
-        name = userinfo['given_name'] + " " + userinfo['family_name']
+        if 'family_name' in userinfo:
+            name = userinfo['given_name'] + " " + userinfo['family_name']
+        else:
+            name = userinfo['given_name']
         random_pass_len = 8
         password = ''.join(secrets.choice(string.ascii_uppercase + string.digits)
                           for i in range(random_pass_len))
@@ -135,7 +138,7 @@ def db_blogentry():
     db_blogentry = Privateblog.query.all()
 
     for i in db_blogentry:
-        app.logger.debug(i.to_dict())
+        #app.logger.debug(i.to_dict())
         owner_id = i.to_dict()["owner_id"]
         app.logger.debug(owner_id)
         user_data = AuthUser.query.get(owner_id)
@@ -150,7 +153,7 @@ def db_user_blogentry():
     db_user_blogentry = Privateblog.query.filter(Privateblog.owner_id == current_user.id)
     
     for i in db_user_blogentry:
-        app.logger.debug(i.to_dict())
+        #app.logger.debug(i.to_dict())
         owner_id = i.to_dict()["owner_id"]
         app.logger.debug(owner_id)
         user_data = AuthUser.query.get(owner_id)
@@ -167,16 +170,20 @@ def db_select_blogentry(blog_email):
     db_select_blogentry = Privateblog.query.filter_by(owner_id=user.id).all()
     
     for i in db_select_blogentry:
-        app.logger.debug(i.to_dict())
+        #app.logger.debug(i.to_dict())
         owner_id = i.to_dict()["owner_id"]
         app.logger.debug(owner_id)
         user_data = AuthUser.query.get(owner_id)
         user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
         blogentry.append({**user_dict, **i.to_dict(), 'email': user.email})
-    app.logger.debug("DB BlogEntry: " + str(blogentry))
+    #app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
 
+@app.route('/images/<path:filename>')
+def image_path(filename):
+    app.logger.debug(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], '', filename ))
+    return send_from_directory(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], ''), filename)
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
@@ -186,17 +193,22 @@ def freeFan():
         id_ = form.entryid.data
         message = form.message.data
         pic = form.image.data
-        pic_string = None
+        filename = None
+
         if pic:
-            pic_string = base64.b64encode(pic.read())
+            filename = secure_filename(images.save(pic))
+
         if not id_:
-            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=pic_string, owner_id=current_user.id)
-            app.logger.debug(str(entry))
+            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=filename, owner_id=current_user.id)
+            #app.logger.debug(str(entry))
             db.session.add(entry)
         else:
             blogentry = Privateblog.query.get(id_)
             if blogentry.owner_id == current_user.id:
-                blogentry.update(message=message, avatar_url=current_user.avatar_url,img=pic_string)
+                if not filename:
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=blogentry.img)
+                else:
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=filename)
         db.session.commit()
         return db_blogentry()
     return render_template('freeFan.html', form=form)
@@ -205,43 +217,30 @@ def freeFan():
 @login_required
 def userfreeFan():
     form = forms.BlogForm()
-    if request.method == 'POST':
-        result = request.form.to_dict()
-        app.logger.debug(str(result))
-        id_ = result.get('id', '')
-        validated = True
-        validated_dict = dict()
-        valid_keys = ['message', 'avatar_url']
+    if form.validate_on_submit():
+        app.logger.debug(current_user.id)
+        id_ = form.entryid.data
+        message = form.message.data
+        pic = form.image.data
+        filename = None
 
-        # validate the input
-        for key in result:
-            app.logger.debug(key, result[key])
-            # screen of unrelated inputs
-            if key not in valid_keys:
-                continue
+        if pic:
+            filename = secure_filename(images.save(pic))
 
-            value = result[key].strip()
-            if not value or value == 'undefined':
-                validated = False
-                break
-            validated_dict[key] = value
-
-        if validated:
-            app.logger.debug('validated dict: ' + str(validated_dict))
-            # if there is no id: create a new blog entry
-            if not id_:
-                validated_dict['owner_id'] = current_user.id
-                entry = Privateblog(**validated_dict)
-                app.logger.debug(str(entry))
-                db.session.add(entry)
-            # if there is an id already: update the blog entry
-            else:
-                blogentry = Privateblog.query.get(id_)
-                if blogentry.owner_id == current_user.id:
-                    blogentry.update(**validated_dict)
-            db.session.commit()
-
-        return db_user_blogentry()
+        if not id_:
+            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=filename, owner_id=current_user.id)
+            #app.logger.debug(str(entry))
+            db.session.add(entry)
+        else:
+            blogentry = Privateblog.query.get(id_)
+            if blogentry.owner_id == current_user.id:
+                app.logger.debug(f"img = {blogentry.img}")
+                if not filename:
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=blogentry.img)
+                else:
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=filename)
+        db.session.commit()
+        return db_blogentry()
     return render_template('yourfreeFan.html', form=form)
 
 @app.route("/user_posts/<string:blog_email>")

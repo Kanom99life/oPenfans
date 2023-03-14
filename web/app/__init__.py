@@ -10,7 +10,7 @@ from flask_uploads import UploadSet, IMAGES, configure_uploads
 
 
 app = Flask(__name__, static_folder='static')
-app.config['UPLOADED_PHOTOS_DEST'] = 'app/static/uploads'
+app.config['UPLOADED_PHOTOS_DEST'] = 'app/uploads'
 images = UploadSet('photos', IMAGES)
 configure_uploads(app, images)
 

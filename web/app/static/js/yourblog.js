@@ -75,7 +75,7 @@ function blog_table(blog_data) {
         if(oldDate.getUTCSeconds() === editDate.getUTCSeconds()){
           return currentBlog(id, name, message, email, date, DMY, avatar_url, url, img);
         }else{
-          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url);
+          return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url, img);
         }    
     };
 
@@ -103,7 +103,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
                 <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
-                <a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>
+                <a class="tweet-username" id="name${id}">${name}</a>
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>
 
@@ -131,10 +131,10 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
     
               <div class="tweet-text" id="message${id}">${message}</div>
               ${ img ? 
-              `<div class="tweet-text">
-                <img style="max-width: 75%" src="data:image/jpeg;base64,${img}" />
-              </div>` : ``
-              }
+                `<div class="tweet-text">
+                  <img style="max-width: 75%" src="/images/${img}" />
+                </div>` : ``
+                }
           </div>
         </div>
       </div>`;
@@ -142,7 +142,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 
 
 
-function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url, url){
+function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url, url, img){
   return `
       <div class="tweet">
         <div class="row">
@@ -180,9 +180,12 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
                  </div>
               </div>
             </div>
-    
               <div class="tweet-text" id="message${id}">${message}</div>
-
+              ${ img ? 
+                `<div class="tweet-text">
+                  <img style="max-width: 75%" src="/images/${img}" />
+                </div>` : ``
+                }     
           </div>
         </div>
       </div>`;
