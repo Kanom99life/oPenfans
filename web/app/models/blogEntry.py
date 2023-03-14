@@ -5,7 +5,6 @@ from sqlalchemy_serializer import SerializerMixin
 class BlogEntry(db.Model, SerializerMixin):
     __tablename__ = "blogentry"
 
-
     id = db.Column(db.Integer, primary_key=True)
     message = db.Column(db.String(280))
     date_created = db.Column(db.DateTime)

@@ -84,6 +84,7 @@
                   <button id="add_blog_notAuth" type="button" onclick="alert('You need to login to create post')" >Welcome to openFan</button>
                   {% endif %}
                 </div>
+                <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
                 <form id="addBlogBlog" hidden="hidden" method="post" enctype="multipart/form-data">
                   {{ form.csrf_token }}
                   {% if current_user.is_authenticated %}

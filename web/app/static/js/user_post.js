@@ -1,10 +1,13 @@
 var lastestID = 0;
 var curr_email = $("#curr_email").val();
+console.log(curr_email)
+var user_email = $("#user_email").val();
+console.log(user_email)
 var curr_name = $("#name").val();
 
 $(document).ready(function () {
     (function () {
-      $.getJSON("/select_blogentry/"+curr_email, blog_table); //user_blogentry
+      $.getJSON("/select_blogentry/"+user_email, blog_table); //user_blogentry
      // $.getJSON("/user_blogentry", blog_table); //user_blogentry
        
     })();
@@ -88,6 +91,7 @@ function blog_table(blog_data) {
 
 
 function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url,img){
+  console.log(email)
   return `
       <div class="tweet">
         <div class="row">
@@ -141,6 +145,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 
 
 function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url){
+  console.log(email)
   return `
       <div class="tweet">
         <div class="row">

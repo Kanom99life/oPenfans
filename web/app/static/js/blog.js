@@ -1,5 +1,6 @@
 var lastestID = 0;
 var curr_email = $("#curr_email").val();
+console.log(curr_email)
 var curr_name = $("#name").val();
 
 
@@ -92,6 +93,7 @@ function blog_table(blog_data) {
 
 
 function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url,img){
+  console.log(email)
   return `
       <div class="tweet">
         <div class="row">
@@ -146,6 +148,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 
 
 function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url){
+  console.log(email)
   return `
       <div class="tweet">
         <div class="row">

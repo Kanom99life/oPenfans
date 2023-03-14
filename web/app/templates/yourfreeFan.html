@@ -79,12 +79,13 @@
                   
                   
     
-                </div>
+                </div>  
+                <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
                 <form id="addBlogBlog" hidden="hidden" enctype="multipart/form-data">
                   {{ form.csrf_token }}
                   {% if current_user.is_authenticated %}
-                    {{ form.entryid()}}
-                    {{ form.message()}}
+                    {{ form.entryid() }}
+                    {{ form.message() }}
                     {% if form.message.errors %}
                       {% for error in form.message.errors %}
                         {{ error }}

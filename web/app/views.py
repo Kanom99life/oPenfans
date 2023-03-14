@@ -182,6 +182,7 @@ def db_select_blogentry(blog_email):
 def freeFan():
     form = forms.BlogForm()
     if form.validate_on_submit():
+        app.logger.debug(current_user.id)
         id_ = form.entryid.data
         message = form.message.data
         pic = form.image.data
@@ -195,7 +196,7 @@ def freeFan():
         else:
             blogentry = Privateblog.query.get(id_)
             if blogentry.owner_id == current_user.id:
-                blogentry.update(message=message, avatar_url=current_user.avatar_url,img=pic_string, owner_id=current_user.id)
+                blogentry.update(message=message, avatar_url=current_user.avatar_url,img=pic_string)
         db.session.commit()
         return db_blogentry()
     return render_template('freeFan.html', form=form)
@@ -252,6 +253,10 @@ def user_posts(blog_email):
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
     
     return render_template('user_post.html', user=user, posts=user_posts, form=form)
+
+# @app.route('/post_only', methods=['POST'])
+# def post_only():
+#     return "POST"
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():
@@ -419,7 +424,10 @@ def submit_form():
         db.session.commit()
         
          # Update all records in the database with the old name and email
-        BlogEntry.query.filter_by(name=old_name, email=old_email).update({BlogEntry.name: new_name, BlogEntry.email: new_email, BlogEntry.avatar_url: new_avatar})
+        #BlogEntry.query.filter_by(name=old_name, email=old_email).update({BlogEntry.name: new_name, BlogEntry.email: new_email, BlogEntry.avatar_url: new_avatar})
+        AuthUser.query.filter_by(name=old_name, email=old_email).update({AuthUser.name: new_name, AuthUser.email: new_email, Privateblog.avatar_url: new_avatar})
+        Privateblog.query.filter_by(owner_id=current_user.id).update({BlogEntry.avatar_url: new_avatar})
+        
         db.session.commit()
         flash('Your changes have been saved.', 'success')
         

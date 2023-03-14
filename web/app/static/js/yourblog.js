@@ -62,7 +62,7 @@ function clearForm() {
 
 function blog_table(blog_data) {
     const data = { data: blog_data }
-    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url }) => {
+    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url , img}) => {
         url = "/yourblog";
         lastestID = id;
         let date = formatTime(date_created);

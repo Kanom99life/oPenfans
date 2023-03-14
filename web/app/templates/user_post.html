@@ -71,7 +71,8 @@
       <div id="left_2" class="col-md-2"></div>
       <div id="center_8" class="col-md-8">
         <div class="content-box">
-                <input type="hidden" id="curr_email" name="email" value="{{user.email}}">
+          <input type="hidden" id="user_email" name="user_email" value="{{user.email}}">
+          <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
                 <form id="addBlogBlog" hidden="hidden" enctype="multipart/form-data">
                     {{ form.csrf_token }}
                     {% if current_user.is_authenticated %}
