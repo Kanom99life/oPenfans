@@ -162,4 +162,8 @@ cython_debug/
 #  option (not recommended) you can uncomment the following to ignore the entire idea folder.
 #.idea/
 
-printf '.jpg\n.jpeg\n.png\n.gif\n'
+# Trash file
+*.jpg
+*.jpeg
+*.png
+*.gif
