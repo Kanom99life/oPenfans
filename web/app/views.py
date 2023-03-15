@@ -2,7 +2,7 @@ import secrets
 import string
 import os
 from flask import (jsonify, render_template,
-                   request, url_for, flash, redirect, send_from_directory)
+                   request, url_for, flash, redirect, send_from_directory, Response)
 import json
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -15,6 +15,7 @@ from app import login_manager
 from app import oauth
 from app.models.blogEntry import BlogEntry
 from app.models.authuser import AuthUser, Privateblog
+from app.models.subscriber import Subscribe
 from app.forms import forms
 #import base64
 
@@ -36,6 +37,8 @@ def db_connection():
         return '<h1>db works.</h1>'
     except Exception as e:
         return '<h1>db is broken.</h1>' + str(e)
+    
+#------------------------------------- Oauth Login -------------------------------------------------------
 
 @app.route('/google/')
 def google():
@@ -132,18 +135,32 @@ def facebook_auth():
     login_user(user)
     return redirect('/')
 
+#------------------------ Database to JSON ----------------------------------------------------------------
+
 @app.route("/blogentry")
 def db_blogentry():
     blogentry = []
     db_blogentry = Privateblog.query.all()
-
     for i in db_blogentry:
         #app.logger.debug(i.to_dict())
         owner_id = i.to_dict()["owner_id"]
         app.logger.debug(owner_id)
-        user_data = AuthUser.query.get(owner_id)
-        user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
-        blogentry.append({**user_dict, **i.to_dict()})
+        if current_user.is_authenticated:
+            sub_check = Subscribe.query.filter_by(sub_owner=owner_id, user_sub=current_user.id).first()
+            if sub_check or owner_id == current_user.id:
+                user_data = AuthUser.query.get(owner_id)
+                user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+                user_dict['can_read'] = True
+            else:   
+                user_data = AuthUser.query.get(owner_id)
+                user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+                user_dict['can_read'] = False
+            blogentry.append({**user_dict, **i.to_dict()})
+        else:   
+            user_data = AuthUser.query.get(owner_id)
+            user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
+            user_dict['can_read'] = False
+            blogentry.append({**user_dict, **i.to_dict()})
 
     return jsonify(blogentry)
 
@@ -176,7 +193,6 @@ def db_select_blogentry(blog_email):
         user_data = AuthUser.query.get(owner_id)
         user_dict = {attr: getattr(user_data, attr) for attr in ['id', 'email', 'name', 'avatar_url']}
         blogentry.append({**user_dict, **i.to_dict(), 'email': user.email})
-    #app.logger.debug("DB BlogEntry: " + str(blogentry))
 
     return jsonify(blogentry)
 
@@ -184,6 +200,53 @@ def db_select_blogentry(blog_email):
 def image_path(filename):
     app.logger.debug(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], '', filename ))
     return send_from_directory(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], ''), filename)
+
+#--------------------------- Subs ---------------------------------------------------------------------------
+
+@app.route("/sub_table")
+def db_subscription(var=None):
+    subscription = []
+    db_subscription = Subscribe.query.all()
+
+    subscription = list(map(lambda x: x.to_dict(), db_subscription))
+    app.logger.debug("DB sub table: " + str(subscription))
+    return jsonify(data=subscription, message=var)
+
+@app.route("/subscribe/<string:blog_email>")
+@login_required
+def subscribe(blog_email):
+    id_ = current_user.id
+    sub_owner = AuthUser.query.get(email=blog_email)
+    auth = Subscribe.query.filter_by(user_sub=id_, sub_owner=sub_owner).first()
+    app.logge.debug(auth)
+    if auth:
+        app.logge.debug("Pass")
+        return render_template('user_post.html', sub_owner=sub_owner)
+    else:
+        app.logge.debug("Didn't pass condition.")
+        return render_template('user_post.html', sub_owner=sub_owner)
+    
+@app.route("/add-sub/<string:blog_email>", methods=('GET', 'POST'))
+@login_required
+def ToSubscribe(blog_email):
+    if request.method == 'POST':
+        id_ = current_user.id
+        sub_owner = AuthUser.query.filter_by(email=blog_email).first()
+        sub_check = Subscribe.query.filter_by(sub_owner=sub_owner.id, user_sub=id_).first()
+        if not sub_check:
+            app.logger.debug(sub_owner.id)
+            entry = Subscribe(user_sub=current_user.id, sub_owner=sub_owner.id)
+            db.session.add(entry)
+            db.session.commit()
+            return db_subscription('subscribed')
+        else:
+            db.session.delete(sub_check)
+            db.session.commit()
+            return db_subscription('unsubscribed')
+        
+    return Response(status=300)
+
+# ------------------------- Web Page -------------------------------------------------------------------------
 
 @app.route('/', methods=('GET', 'POST'))
 def freeFan():
@@ -199,7 +262,7 @@ def freeFan():
             filename = secure_filename(images.save(pic))
 
         if not id_:
-            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=filename, owner_id=current_user.id)
+            entry = Privateblog(message=message, avatar_url=current_user.avatar_url, img=filename, owner_id=current_user.id)
             #app.logger.debug(str(entry))
             db.session.add(entry)
         else:
@@ -226,9 +289,9 @@ def userfreeFan():
 
         if pic:
             filename = secure_filename(images.save(pic))
-
+            
         if not id_:
-            entry = Privateblog(message=message, avatar_url=current_user.avatar_url,img=filename, owner_id=current_user.id)
+            entry = Privateblog(message=message, avatar_url=current_user.avatar_url, img=filename, owner_id=current_user.id)
             #app.logger.debug(str(entry))
             db.session.add(entry)
         else:
@@ -236,26 +299,33 @@ def userfreeFan():
             if blogentry.owner_id == current_user.id:
                 app.logger.debug(f"img = {blogentry.img}")
                 if not filename:
-                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=blogentry.img)
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url, img=blogentry.img)
                 else:
-                    blogentry.update(message=message, avatar_url=current_user.avatar_url,img=filename)
+                    img_path = os.path.join('../' + app.config["UPLOADED_PHOTOS_DEST"] , blogentry.img)
+                    app.logger.debug(img_path)
+                    # if os.path.exists(img_path):
+                    #     os.remove(img_path)
+                    # else:
+                    #     print(f"File {img_path} does not exist.")
+                    blogentry.update(message=message, avatar_url=current_user.avatar_url, img=filename)
+                    
         db.session.commit()
         return db_blogentry()
+    
+    
     return render_template('yourfreeFan.html', form=form)
 
-@app.route("/user_posts/<string:blog_email>")
+@app.route("/user/<string:blog_email>")
 @login_required
 def user_posts(blog_email):
     form = forms.BlogForm()
+    id_ = current_user.id
     user = AuthUser.query.filter_by(email=blog_email).first_or_404()
-
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
+    check_sub = Subscribe.query.filter_by(sub_owner=user.id, user_sub=id_).first()
     
-    return render_template('user_post.html', user=user, posts=user_posts, form=form)
+    return render_template('user_post.html', user=user, posts=user_posts, form=form, check_sub=check_sub)
 
-# @app.route('/post_only', methods=['POST'])
-# def post_only():
-#     return "POST"
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
 def remove_blog():
@@ -484,3 +554,4 @@ def gen_avatar_url(email, name):
         fname + "+" + lname + "&background=" + \
         bgcolor + "&color=" + color
     return avatar_url
+

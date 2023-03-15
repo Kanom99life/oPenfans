@@ -67,6 +67,36 @@
   </nav>
 
   <div class="container">
+    <div class="profile">
+      <img src="{{ user.avatar_url }}" class="tw-user-small rounded-circle" width="52">
+      <span class="username">{{ user.name }}</span>
+      <form id="send_sub">
+        <!-- <input id="subscribe" type="hidden" value="" /> -->
+        {% if check_sub %}
+          <input type="submit" id="subscribe" value="unsubscribe" />
+        {% else %}
+          <input type="submit" id="subscribe" value="subscribe" />
+        {% endif %}
+      </form>
+      <div class="profile-info">
+        <div class="stats">
+          <div class="posts">
+            <span class="number">10</span>
+            <span class="label">posts</span>
+          </div>
+          <div class="followers">
+            <span class="number">100</span>
+            <span class="label">followers</span>
+          </div>
+          <div class="following">
+            <span class="number">50</span>
+            <span class="label">following</span>
+          </div>
+        </div>
+        <p class="bio">Hello World</p>
+      </div>
+    </div>
+  </div>
     <div class="row">
       <div id="left_2" class="col-md-2"></div>
       <div id="center_8" class="col-md-8">
@@ -90,14 +120,17 @@
                         {% endfor %}
                       {% endif %}
                     {% endif %}
-                    <input type="submit" id="submit_form" name="submit" value="Submit">
+                    <input type="submit" id="submit_form" name="submit" value="Post">
                     <button id="clear_form" type="button">Clear</button>
                     <button id="cancel_form" type="button">Cancel</button>
                   </form>
               </div>
               <!-- <div class="col-md-1"></div> -->
-            
+          {% if check_sub %}  
           <div id="blog_display" class="container"></div>
+          {% else %}
+            <p>This account is private, please subscribe to unlock the content.</p>
+          {% endif %}
         </div>
       </div>
       <div id="right_2" class="col-md-2"></div>

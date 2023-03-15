@@ -55,6 +55,25 @@ $("#addBlogBlog").submit(function (event) {
 });
 
 
+$("#send_sub").submit (function(e) {
+  e.preventDefault();
+	var user_email = $("#user_email").val();
+	$.post("/add-sub/" + user_email, (data) => {
+		  console.log("sub success");
+      console.log(data);
+      var sub_button = $("#subscribe");
+      if (data.message === 'subscribed') {
+        sub_button.val('unsubscribe');
+      } else {
+        sub_button.val('subscribe');
+      }
+      location.reload();
+		  // or refresh page by js
+	});
+})
+
+
+
 function clearForm() {
     $('#addBlogBlog')[0].reset();
     $('#entryid').val('');
@@ -83,10 +102,13 @@ function blog_table(blog_data) {
     //console.log(JSON.stringify(data));
     const blog = data.data.map(creatBlog);
     // And add it for each HTML template to the body.
-    for (let i = 0; i < blog.length; i++) {
-        document.getElementById("blog_display").innerHTML =
-            blog[i] + document.getElementById("blog_display").innerHTML;
+    var elementExists = document.getElementById("blog_display");
+    if (elementExists) {
+      for (let i = 0; i < blog.length; i++) {
+        document.getElementById("blog_display").innerHTML = blog[i] + document.getElementById("blog_display").innerHTML;
+      }
     }
+    
 };
 
 
@@ -104,7 +126,6 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
             <div class="row tweet-info">
               <div class="col-md-auto">
                 <span class="tweet-id" id="id-blog" hidden="hidden">${id}</span>
-                <!--<span class="tweet-username" id="name${id}"><a href="${url}${name}">${name}</a></span> -->
                 <a class="tweet-username" id="name${id}" href="${url}${email}">${name}</a>
                 <span class="tweet-age" data-text="${dateMonthYear}"> · ${post_date} · <i class="fa-solid fa-earth-asia"></i></span>
               </div>

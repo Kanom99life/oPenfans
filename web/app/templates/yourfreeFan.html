@@ -36,7 +36,6 @@
       <form class="form-inline">
         
         <div class="box3">
-            
             <div class="dropdown" >
               <img src="{{ current_user.avatar_url }}" class="tw-user-small rounded-circle" onclick="showDropdownMenu(event)" width="52">
                   <div class="dropdown-menu" id ="dropdown_item">
@@ -60,6 +59,29 @@
       </form>
     </div>
   </nav>
+   <div class="container">
+    <div class="profile">
+      <img src="{{ current_user.avatar_url }}" class="tw-user-small rounded-circle" width="52">
+      <span class="username">{{ current_user.name }}</span>
+      <div class="profile-info">
+        <div class="stats">
+          <div class="posts">
+            <span class="number">10</span>
+            <span class="label">posts</span>
+          </div>
+          <div class="followers">
+            <span class="number">100</span>
+            <span class="label">followers</span>
+          </div>
+          <div class="following">
+            <span class="number">50</span>
+            <span class="label">following</span>
+          </div>
+        </div>
+        <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget bibendum eros. Vestibulum tincidunt condimentum dolor, at faucibus lectus. Sed consequat urna vel purus sodales, ac pulvinar neque tincidunt. Curabitur congue hendrerit odio id gravida.</p>
+      </div>
+    </div>
+  </div>
   
   <div class="container">
     <div class="row">
@@ -97,7 +119,7 @@
                         {{ error }}
                       {% endfor %}
                     {% endif %}
-                    <input type="submit" id="submit_form" name="submit" value="Submit">
+                    <input type="submit" id="submit_form" name="submit" value="Post">
                     <button id="clear_form" type="button">Clear</button>
                     <button id="cancel_form" type="button">Cancel</button>
                   </form>
