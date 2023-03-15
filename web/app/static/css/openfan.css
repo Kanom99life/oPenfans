@@ -10,19 +10,16 @@ nav {
     background-color: #cbe4f4;
     /*nav bar color*/
     
-    margin-bottom: 10px;
+
 }
 
 .navbar-nav a {
     font-weight: bold;
     color: rgb(108, 104, 104);
-    /* text of nav bar */
+
 }
 
-/* .container {
-  width: 750px;
-}
-*/
+
 
 img.tw-user-small {
     height: 55px;
@@ -35,17 +32,6 @@ img.tw-user-medium {
     width: 60px;
 }
 
-#nav-search {
-    border-radius: 20px;
-    background-color: #e7ecf0
-        /*nav bar search */
-}
-
-#nav-tweet-btn {
-    border-radius: 20px;
-    background-color: #67b1f9;
-    color: #ffffff;
-}
 
 .content-box {
     background-color: #ffffff;
@@ -512,3 +498,4 @@ h4 {
 .button.is-block{
     border-radius: 10px;
 }
+

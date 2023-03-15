@@ -43,11 +43,11 @@
                   <div class="dropdown-menu" id ="dropdown_item">
                       <a class="dropdown-item" id="Profile" href="{{ url_for('userfreeFan') }}">
                         <i class="fa-solid fa-user"></i>
-                        {{ current_user.name }}
+                        Your Profile
                       </a>
                       <a class="dropdown-item" id="editProfile" >
                         <i class="fa-solid fa-pen-to-square"></i>
-                          Edit profile
+                          Edit Account
                       </a>
                      <a class="dropdown-item" id="logout">
                         <i class="fa-solid fa-right-from-bracket"></i>
@@ -97,6 +97,7 @@
       </div>
     </div>
   </div>
+  <div class="container">
     <div class="row">
       <div id="left_2" class="col-md-2"></div>
       <div id="center_8" class="col-md-8">
@@ -129,13 +130,16 @@
           {% if check_sub %}  
           <div id="blog_display" class="container"></div>
           {% else %}
-            <p>This account is private, please subscribe to unlock the content.</p>
+          <p style="text-align:center;">This account is private, please subscribe to unlock the content.</p>
           {% endif %}
         </div>
+       </div>
       </div>
+
       <div id="right_2" class="col-md-2"></div>
     </div>
   </div>
+
   <script src="/static/js/user_post.js"></script>
 </body>
 

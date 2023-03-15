@@ -1,0 +1,428 @@
+@import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
+@import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap");
+body {
+    background-color: #e7ecf0;
+    word-wrap: break-word;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+
+nav {
+    background-color: #cbe4f4;
+    /*nav bar color*/
+}
+
+.navbar-nav a {
+    font-weight: bold;
+    color: rgb(108, 104, 104);
+
+}
+
+.content-box {
+    background-color: #ffffff;
+    margin-bottom: 0px;
+}
+
+.new-tweet-row {
+    background-color: #eaf5fe;
+    
+    padding-top: 10px;
+    padding-bottom: 10px;
+    justify-content: center;
+}
+
+.tweet {
+    background-color: #ffffff;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #edf1f4;
+    /*color line*/
+}
+
+.tweet-info {
+    word-wrap: break-word;
+    max-width: 57ch;
+
+}
+
+.tweet-username {
+    font-family: sans-serif;
+    font-weight: bold;
+    color: #0c195f;
+}
+
+.tweet-usertag {
+    font-family: Roboto;
+    
+}
+
+.tweet-arrow {
+    position: absolute;
+    left: 90%;
+    padding-right: 25px;
+}
+
+.tweet-text,
+.tweet-media {
+
+    word-break: break-word;
+    font-size: 26px;
+    padding-right: 10px;
+}
+
+/*span a container for date */
+.tweet-age {
+    position: relative;
+}
+
+.username {
+    margin-left: 0.5rem;
+    font-weight: bold;
+}
+
+.tweet-age:before {
+    content: attr(data-text);
+    position: absolute;
+    font-size: small;
+    /* vertically center */
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* move to right */
+    left: 60%;
+    margin-left: 10px;
+    /* and add a small left margin */
+
+    /* basic styles */
+    width: 160px;
+
+    padding: 5px;
+    border-radius: 10px;
+    background: #f9f6f6;
+    color: #000000;
+    text-align: center;
+
+    display: none;
+    /* hide by default */
+}
+
+.tweet-age:hover {
+    border-bottom: 1px solid #000000;
+}
+
+.tweet-age:hover:before {
+    display: block;
+}
+
+.profile-header {
+  background: #fff;
+  width: 100%;
+  
+  height: 190px;
+  position: relative;
+  box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);
+}
+
+.profile-img {
+  float: left;
+  width: 340px;
+  height: 200px;
+}
+
+.profile-img img {
+  border-radius: 50%;
+  height: 230px;
+  width: 230px;
+  border: 5px solid #fff;
+  box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
+  position: absolute;
+  left: 50px;
+  top: 20px;
+  z-index: 5;
+  background: #fff;
+}
+
+.profile-nav-info {
+  float: left;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding-top: 60px;
+}
+
+.profile-nav-info h3 {
+  
+  font-size: 3rem;
+  font-family: sans-serif;
+  font-weight: bold;
+}
+
+
+.main-bd {
+  width: 100%;
+  display: flex;
+  
+}
+
+.profile-side {
+  width: 300px;
+  background: #fff;
+  box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
+  padding: 80px 30px 20px;
+  font-family: "Bree Serif", serif;
+  margin-left: 10px;
+  z-index: 99;
+  text-align: center;
+}
+
+.profile-side p {
+ 
+  margin-bottom: 20px;
+  color: #333;
+  font-size: 20px;
+
+}
+
+.profile-side p i {
+  color: #e40046;
+  margin-right: 10px;
+}
+
+.mobile-no i {
+  transform: rotateY(180deg);
+  color: #e40046;
+}
+
+.profile-btn {
+  display: flex;
+}
+
+button.chatbtn,
+button.createbtn {
+  border: 0;
+  padding: 10px;
+  width: 100%;
+  border-radius: 3px;
+  background: #e40046;
+  color: #fff;
+  font-family: "Bree Serif";
+  font-size: 1rem;
+  margin: 5px 2px;
+  cursor: pointer;
+  outline: none;
+  margin-bottom: 10px;
+  transition: background 0.3s ease-in-out;
+  box-shadow: 0px 5px 7px 0px rgba(0, 0, 0, 0.3);
+}
+
+button.chatbtn:hover,
+button.createbtn:hover {
+  background: rgba(288, 0, 70, 0.9);
+}
+
+button.chatbtn i,
+button.createbtn i {
+  margin-right: 5px;
+}
+.chatbtn a{
+   color: inherit;
+   text-decoration: none;
+}
+
+
+@media (max-width: 1100px) {
+  .profile-side {
+    width: 250px;
+    padding: 90px 15px 20px;
+  }
+
+  .profile-img img {
+    height: 200px;
+    width: 200px;
+    left: 50px;
+    top: 50px;
+  }
+}
+
+@media (max-width: 900px) {
+  body {
+    margin: 0 20px;
+  }
+
+  .profile-header {
+    display: flex;
+    height: 100%;
+    flex-direction: column;
+    text-align: center;
+    padding-bottom: 20px;
+  }
+
+  .profile-img {
+    float: left;
+    width: 100%;
+    height: 200px;
+  }
+
+  .profile-img img {
+    position: relative;
+    height: 200px;
+    width: 200px;
+    left: 0px;
+  }
+
+
+
+
+  .main-bd {
+    flex-direction: column;
+    padding-right: 0;
+  }
+
+  .profile-side {
+    width: 100%;
+    text-align: center;
+    padding: 20px;
+    margin: 5px 0;
+    
+  }
+
+}
+
+@media (max-width: 400px) {
+  body {
+    margin: 10;
+  }
+  
+.tweet-info {
+    word-wrap: break-word;
+    max-width: 57ch;
+   
+}
+
+.tweet-username {
+    
+    padding-left: 10px;
+}
+
+.tweet-arrow {
+    position: absolute;
+    left: 85%;
+    
+}
+
+.tweet-text,
+.tweet-media {
+    padding-left: 10px;
+}
+ 
+}
+
+
+input[type=submit],
+button {
+    background-color: #67b1f9;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    font-size: smaller;
+    border-radius: 90px;
+    cursor: pointer;
+}
+
+input[type=submit]:hover,
+#submit_form:hover {
+    background-color: #93d2fb;
+}
+
+#add_blog, #add_blog_notAuth {
+    left: 10%;
+    width: 80%;
+    border: none;
+    outline: none;
+    font-size: larger;
+    background-color: #88c4f5;
+    cursor: pointer;
+    position: relative;
+    z-index: 0;
+    border-radius: 90px;
+    user-select: none;
+    -webkit-user-select: none;
+    touch-action: manipulation;
+}
+
+#add_blog:hover, #add_blog_notAuth:hover  {
+    color: #0099ff;
+    background-color: #cecfd4;
+    transform: scale(1.15);
+    transition-delay: 0s;
+    transition-duration: 0.5s;
+}
+
+#add_blog:before ,#add_blog_notAuth::before {
+    content: "";
+    background: linear-gradient(45deg,
+            #2600ff,
+            #00e5ff,
+            #64a9f4,
+            #8affff,
+            #00ffd5,
+            #5fb7fa,
+            #00ffd5,
+            #6c94df,
+            #2600ff);
+
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    background-size: 400%;
+    z-index: -1;
+    filter: blur(5px);
+    -webkit-filter: blur(5px);
+    width: calc(100% + 4px);
+    height: calc(100% + 4px);
+    animation: glowing-add_blog 30s linear infinite;
+    transition: opacity 0.3s ease-in-out;
+    border-radius: 90px;
+}
+
+@keyframes glowing-add_blog {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+#add_blog:after ,#add_blog_notAuth:after {
+    z-index: -1;
+    content: "";
+    position: absolute;
+    
+    width: 100%;
+    height: 100%;
+    background-color: #88c4f5;
+    left: 0;
+    top: 0;
+    border-radius: 90px;
+}
+input[type=text], input[type=email], select, textarea {
+    width: 100%;
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    box-sizing: border-box;
+    margin-top: 6px;
+    margin-bottom: 16px;
+    resize: vertical;
+}

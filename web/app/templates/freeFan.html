@@ -25,17 +25,11 @@
   <nav class="navbar navbar-expand-md">
     <div class="container">
       <div class="navbar-nav">
-        <!--<a> Welcome, {{ current_user.name }} <i class="fa-solid fa-face-smile"></i></a>-->
         {% if current_user.is_authenticated %}
         <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">openFan</a>
-        {% endif %}
-        <!--<a class="nav-item nav-link" href="#"><span class="oi oi-bolt"></span> Moments</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-bell"></span> Notifications</a>
-        <a class="nav-item nav-link" href="#"><span class="oi oi-envelope-open"></span> Messages</a>-->
-      
+        {% endif %}      
       </div>
-      <form class="form-inline">
-        
+      <form class="form-inline">        
         <div class="box3">
             {% if current_user.is_authenticated %}
             <div class="dropdown" >
@@ -43,19 +37,18 @@
                   <div class="dropdown-menu" id ="dropdown_item">
                       <a class="dropdown-item" id="Profile" href="{{ url_for('userfreeFan') }}">
                         <i class="fa-solid fa-user"></i>
-                        {{ current_user.name }}
+                        Your Profile
                       </a>
                       <a class="dropdown-item" id="editProfile" >
                         <i class="fa-solid fa-pen-to-square"></i>
-                          Edit profile
+                          Edit Account
                       </a>
                      <a class="dropdown-item" id="logout">
                         <i class="fa-solid fa-right-from-bracket"></i>
                           Logout
                       </a>
                   </div>
-           </div>
-            
+           </div>            
             {% endif %}
             {% if not current_user.is_authenticated %}
             <button id="login" type="button">Login</button>
@@ -71,7 +64,6 @@
       <div id="left_2" class="col-md-2"></div>
       <div id="center_8" class="col-md-8">
         <div class="content-box">
-
           <div class="new-tweet-row">
             <div class="row">
               <div class="col-md-12">
@@ -117,5 +109,4 @@
   </div>
   <script src="/static/js/blog.js"></script>
 </body>
-
 </html>

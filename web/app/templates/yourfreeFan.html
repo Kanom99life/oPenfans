@@ -15,7 +15,7 @@
 
   <script src="https://kit.fontawesome.com/87f04edde9.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/openfan.css">
+  <link rel="stylesheet" href="/static/css/yourOpenFan.css">
   <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
   <title>FreeFan</title>
   <link rel = "icon" href = "/static/img/heart.svg" type = "image/x-icon">
@@ -41,58 +41,62 @@
                   <div class="dropdown-menu" id ="dropdown_item">
                       <a class="dropdown-item" id="Profile" href="{{ url_for('userfreeFan') }}">
                         <i class="fa-solid fa-user"></i>
-                        {{ current_user.name }}
+                        Your Profile
                       </a>
                       <a class="dropdown-item" id="editProfile" >
                         <i class="fa-solid fa-pen-to-square"></i>
-                          Edit profile
+                          Edit Account
                       </a>
                      <a class="dropdown-item" id="logout">
                         <i class="fa-solid fa-right-from-bracket"></i>
                           Logout
                       </a>
                   </div>
-           </div>
-            
-            
+           </div>            
          </div>
       </form>
     </div>
+
   </nav>
-   <div class="container">
-    <div class="profile">
-      <img src="{{ current_user.avatar_url }}" class="tw-user-small rounded-circle" width="52">
-      <span class="username">{{ current_user.name }}</span>
-      <div class="profile-info">
-        <div class="stats">
-          <div class="posts">
-            <span class="number">10</span>
-            <span class="label">posts</span>
-          </div>
-          <div class="followers">
-            <span class="number">100</span>
-            <span class="label">followers</span>
-          </div>
-          <div class="following">
-            <span class="number">50</span>
-            <span class="label">following</span>
-          </div>
-        </div>
-        <p class="bio">Lorem ipsum dolor sit amet, consectetur adipiscing elit. In eget bibendum eros. Vestibulum tincidunt condimentum dolor, at faucibus lectus. Sed consequat urna vel purus sodales, ac pulvinar neque tincidunt. Curabitur congue hendrerit odio id gravida.</p>
-      </div>
-    </div>
-  </div>
   
   <div class="container">
+    
+    <div class="profile-header">
+      <div class="profile-img">
+        <img src="{{ current_user.avatar_url }}" width="200" alt="Profile Image">
+      </div>
+      <div class="profile-nav-info">
+        <h3 class="user-name">{{current_user.name}}</h3>
+      </div>
+    </div>
+    <div class="main-bd">
+      <div class="left-side">
+        <div class="profile-side">
+          <p class="user-mail"><i class="fa fa-envelope"></i>{{current_user.email}}</p>
+          
+          <div class="profile-btn">
+            <!-- <button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i><a href="mailto:">Send Email</a></button> -->
+            <button class="chatbtn" id="editProfile">
+              <a href="{{ url_for('freeFan_profile') }}">
+                <i class="fa-solid fa-pen-to-square"></i> Edit Account
+              </a>
+            </button>
+            
+           
+          </div>
+        </div>
+        
+  </div>
+      
+  <div class="container">
     <div class="row">
-      <div id="left_2" class="col-md-2"></div>
-      <div id="center_8" class="col-md-8">
+      
+      <div id="center_8" class="col-md-12">
         <div class="content-box">
 
           <div class="new-tweet-row">
             <div class="row">
 
-              <!-- <div class="col-md-1"></div> -->
 
               <div class="col-md-12">
                 <div id="addBlog_display" class="container">
@@ -100,7 +104,6 @@
                   <button id="add_blog" type="button" >What's on your mind?</button>
                   
                   
-    
                 </div>  
                 <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
                 <form id="addBlogBlog" hidden="hidden" enctype="multipart/form-data">
@@ -131,10 +134,14 @@
           <div id="blog_display" class="container"></div>
         </div>
       </div>
-      <div id="right_2" class="col-md-2"></div>
+    
     </div>
   </div>
-  <script src="/static/js/yourblog.js"></script>
+  </div>
+</div>
+  <script src="/static/js/yourblog.js">
+    
+  </script>
 </body>
 
 </html>
