@@ -310,7 +310,7 @@ def userfreeFan():
                     blogentry.update(message=message, avatar_url=current_user.avatar_url, img=filename)
                     
         db.session.commit()
-        return db_blogentry()
+        return db_user_blogentry()
     
     
     return render_template('yourfreeFan.html', form=form)
