@@ -86,6 +86,8 @@ function blog_table(blog_data) {
         document.getElementById("blog_display").innerHTML =
             blog[i] + document.getElementById("blog_display").innerHTML;
     }
+    var blog_count = document.getElementById("post_count");
+    blog_count.innerHTML = `<i class="fa-solid fa-signs-post"></i>Posts: ` + blog.length;
 };
 
 

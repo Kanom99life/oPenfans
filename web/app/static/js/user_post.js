@@ -109,6 +109,8 @@ function blog_table(blog_data) {
       }
     }
     
+    var blog_count = document.getElementById("post_count");
+    blog_count.innerHTML = `<i class="fa-solid fa-signs-post"></i>Posts: ` + blog.length;
 };
 
 

@@ -310,9 +310,12 @@ def userfreeFan():
                     
         db.session.commit()
         return db_user_blogentry()
+    following = Subscribe.query.filter_by(user_sub=current_user.id).count()
+    followers = Subscribe.query.filter_by(sub_owner=current_user.id).count()
+    app.logger.debug(f"followers = {followers}")
+    app.logger.debug(f"following = {following}")
     
-    
-    return render_template('yourfreeFan.html', form=form)
+    return render_template('yourfreeFan.html', form=form, followers=followers, following=following)
 
 @app.route("/user/<string:blog_email>")
 @login_required
@@ -322,8 +325,12 @@ def user_posts(blog_email):
     user = AuthUser.query.filter_by(email=blog_email).first_or_404()
     user_posts = Privateblog.query.filter_by(owner_id=user.id).all()
     check_sub = Subscribe.query.filter_by(sub_owner=user.id, user_sub=id_).first()
+    following = Subscribe.query.filter_by(user_sub=user.id).count()
+    followers = Subscribe.query.filter_by(sub_owner=user.id).count()
+    app.logger.debug(f"followers = { followers }")
+    app.logger.debug(f"following = { following }")
     
-    return render_template('user_post.html', user=user, posts=user_posts, form=form, check_sub=check_sub)
+    return render_template('user_post.html', user=user, posts=user_posts, form=form, check_sub=check_sub, followers=followers, following=following)
 
 
 @app.route('/remove_blog', methods=('GET', 'POST'))
