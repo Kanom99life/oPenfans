@@ -15,7 +15,7 @@
 
   <script src="https://kit.fontawesome.com/87f04edde9.js" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-  <link rel="stylesheet" href="/static/css/openfan.css">
+  <link rel="stylesheet" href="/static/css/yourOpenFan.css">
   <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
   <title>FreeFan</title>
   <link rel = "icon" href = "/static/img/heart.svg" type = "image/x-icon">
@@ -67,40 +67,37 @@
   </nav>
 
   <div class="container">
-    <div class="profile">
-      <img src="{{ user.avatar_url }}" class="tw-user-small rounded-circle" width="52">
-      <span class="username">{{ user.name }}</span>
-      <form id="send_sub">
-        <!-- <input id="subscribe" type="hidden" value="" /> -->
-        {% if check_sub %}
-          <input type="submit" id="subscribe" value="unsubscribe" />
-        {% else %}
-          <input type="submit" id="subscribe" value="subscribe" />
-        {% endif %}
-      </form>
-      <div class="profile-info">
-        <div class="stats">
-          <div class="posts">
-            <span class="number">10</span>
-            <span class="label">posts</span>
-          </div>
-          <div class="followers">
-            <span class="number">100</span>
-            <span class="label">followers</span>
-          </div>
-          <div class="following">
-            <span class="number">50</span>
-            <span class="label">following</span>
-          </div>
-        </div>
-        <p class="bio">Hello World</p>
+    <div class="profile-header">
+      <div class="profile-img">
+        <img src="{{user.avatar_url }}" width="200" alt="Profile Image">
+      </div>
+      <div class="profile-nav-info">        
+        <h3 class="user-name">{{user.name}}</h3>
+        <form id="send_sub">
+          <!-- <input id="subscribe" type="hidden" value="" /> -->
+          {% if check_sub %}
+            <input type="submit" id="subscribe" value="unsubscribe" />
+          {% else %}
+            <input type="submit" id="subscribe" value="subscribe" />
+          {% endif %}
+        </form>
       </div>
     </div>
+    <div class="main-bd">
+      <div class="left-side">
+        <div class="profile-side">
+          <p class="user-mail"><i class="fa fa-envelope"></i>{{user.email}}</p>          
+          <div class="profile-btn">
+            <button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i><a href="mailto:">Send Email</a></button> 
+      
+            </button>                      
+          </div>
+        </div>        
   </div>
+
   <div class="container">
-    <div class="row">
-      <div id="left_2" class="col-md-2"></div>
-      <div id="center_8" class="col-md-8">
+    <div class="row">      
+      <div id="center_8" class="col-md-12">
         <div class="content-box">
           <input type="hidden" id="user_email" name="user_email" value="{{user.email}}">
           <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
@@ -120,23 +117,19 @@
                           {{ error }}
                         {% endfor %}
                       {% endif %}
-                    {% endif %}
-                    <input type="submit" id="submit_form" name="submit" value="Post">
-                    <button id="clear_form" type="button">Clear</button>
-                    <button id="cancel_form" type="button">Cancel</button>
+                    {% endif %}                    
                   </form>
               </div>
               <!-- <div class="col-md-1"></div> -->
           {% if check_sub %}  
           <div id="blog_display" class="container"></div>
           {% else %}
-          <p style="text-align:center;">This account is private, please subscribe to unlock the content.</p>
+          <p style="text-align:center; padding-top: 50px; padding-right: 20px; font-size: 7em;"><i class="fa-sharp fa-solid fa-lock"></i> </p>
+          <p style="text-align:center; padding-top: 10px; font-size: 1.5em;">This account is private, please subscribe to unlock the content.</p>    
           {% endif %}
         </div>
        </div>
       </div>
-
-      <div id="right_2" class="col-md-2"></div>
     </div>
   </div>
 

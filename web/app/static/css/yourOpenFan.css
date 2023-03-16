@@ -153,6 +153,8 @@ nav {
   flex-direction: column;
   justify-content: center;
   padding-top: 60px;
+  /* align-items: center; */
+  
 }
 
 .profile-nav-info h3 {
@@ -161,6 +163,7 @@ nav {
   font-family: sans-serif;
   font-weight: bold;
 }
+
 
 
 .main-bd {

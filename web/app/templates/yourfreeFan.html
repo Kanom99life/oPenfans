@@ -60,7 +60,6 @@
   </nav>
   
   <div class="container">
-    
     <div class="profile-header">
       <div class="profile-img">
         <img src="{{ current_user.avatar_url }}" width="200" alt="Profile Image">
@@ -72,20 +71,16 @@
     <div class="main-bd">
       <div class="left-side">
         <div class="profile-side">
-          <p class="user-mail"><i class="fa fa-envelope"></i>{{current_user.email}}</p>
-          
+          <p class="user-mail"><i class="fa fa-envelope"></i>{{current_user.email}}</p>          
           <div class="profile-btn">
             <!-- <button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i><a href="mailto:">Send Email</a></button> -->
             <button class="chatbtn" id="editProfile">
               <a href="{{ url_for('freeFan_profile') }}">
                 <i class="fa-solid fa-pen-to-square"></i> Edit Account
               </a>
-            </button>
-            
-           
+            </button>                      
           </div>
-        </div>
-        
+        </div>        
   </div>
       
   <div class="container">
@@ -93,17 +88,11 @@
       
       <div id="center_8" class="col-md-12">
         <div class="content-box">
-
           <div class="new-tweet-row">
             <div class="row">
-
-
               <div class="col-md-12">
                 <div id="addBlog_display" class="container">
-                  
                   <button id="add_blog" type="button" >What's on your mind?</button>
-                  
-                  
                 </div>  
                 <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
                 <form id="addBlogBlog" hidden="hidden" enctype="multipart/form-data">
