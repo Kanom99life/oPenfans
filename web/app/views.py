@@ -207,7 +207,6 @@ def image_path(filename):
 def db_subscription(var=None):
     subscription = []
     db_subscription = Subscribe.query.all()
-
     subscription = list(map(lambda x: x.to_dict(), db_subscription))
     app.logger.debug("DB sub table: " + str(subscription))
     return jsonify(data=subscription, message=var)
