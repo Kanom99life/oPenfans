@@ -19,16 +19,22 @@
   <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
   <title>FreeFan</title>
   <link rel = "icon" href = "/static/img/heart.svg" type = "image/x-icon">
+  <link rel="stylesheet" href="https://cdn-hk.icons8.com/docs/hOgjG0WCoE6SYuBn4sSYgw/style.css"> 
+
+
 </head>
 
 <body>
+  
   <nav class="navbar navbar-expand-md">
     <div class="container">
       <div class="navbar-nav">
         {% if current_user.is_authenticated %}
-        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">openFan</a>
+        <a class="nav-item nav-link" href="{{ url_for('freeFan') }}">openFans</a>
         {% endif %}      
       </div>
+      
+      
       <form class="form-inline">        
         <div class="box3">
             {% if current_user.is_authenticated %}
@@ -70,6 +76,8 @@
                 <div id="addBlog_display" class="container">
                   {% if current_user.is_authenticated %}
                   <button id="add_blog" type="button" >What's on your mind?</button>
+                  
+                  
                   {% endif %}
                   
                   {% if not current_user.is_authenticated %}
@@ -108,5 +116,10 @@
     </div>
   </div>
   <script src="/static/js/blog.js"></script>
+  <script type="text/javascript">
+    ((url,e,k)=>{fetch(url).then(x=>x.json()).then(d=>{for(k of Object.keys(d))
+    if(e=document.getElementById(k))e.innerText=d[k]
+    })})(`https://cdn-hk.icons8.com/docs/hOgjG0WCoE6SYuBn4sSYgw/text.json`)
+    </script> 
 </body>
 </html>

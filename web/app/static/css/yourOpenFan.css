@@ -1,6 +1,7 @@
 @import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
 @import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap");
 body {
+  
     background-color: #e7ecf0;
     word-wrap: break-word;
 }
@@ -13,6 +14,7 @@ body {
 
 
 nav {
+    font-family: "Bree Serif", serif;
     background-color: #cbe4f4;
     /*nav bar color*/
 }
@@ -29,6 +31,7 @@ nav {
 }
 
 .new-tweet-row {
+  
     background-color: #eaf5fe;
     
     padding-top: 10px;
@@ -42,22 +45,26 @@ nav {
     padding-bottom: 20px;
     border-bottom: 1px solid #edf1f4;
     /*color line*/
+    
 }
 
 .tweet-info {
+   font-family: "Bree Serif", serif;
     word-wrap: break-word;
     max-width: 57ch;
 
 }
 
 .tweet-username {
-    font-family: sans-serif;
+    font-family: "Bree Serif", serif;
+
     font-weight: bold;
     color: #0c195f;
 }
 
 .tweet-usertag {
-    font-family: Roboto;
+    font-family: "Bree Serif", serif;
+    
     
 }
 
@@ -77,6 +84,7 @@ nav {
 
 /*span a container for date */
 .tweet-age {
+    font-family: "Bree Serif", serif;
     position: relative;
 }
 
@@ -120,9 +128,9 @@ nav {
 }
 
 .profile-header {
-  background: #fff;
-  width: 100%;
   
+  background: #fff;
+  width: 100%;  
   height: 190px;
   position: relative;
   box-shadow: 0px 3px 4px rgba(0, 0, 0, 0.2);
@@ -141,7 +149,7 @@ nav {
   border: 5px solid #fff;
   box-shadow: 0px 5px 10px rgba(0, 0, 0, 0.2);
   position: absolute;
-  left: 50px;
+  left: 80px;
   top: 20px;
   z-index: 5;
   background: #fff;
@@ -158,12 +166,33 @@ nav {
 }
 
 .profile-nav-info h3 {
-  
+  font-family: "Bree Serif", serif;
   font-size: 3rem;
-  font-family: sans-serif;
   font-weight: bold;
 }
 
+.profile-detail{
+  font-family: "Bree Serif", serif;
+  float: right;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+
+  padding-right: 50px;
+  
+}
+.profile-detail p {
+  padding-top: 5px;
+  padding-right: 20px;
+  /* margin-bottom: 20px; */
+  color: #333;
+  font-size: 20px;
+
+}
+.profile-detail p i {
+  color: #939393;
+  margin-right: 10px;
+}
 
 
 .main-bd {
@@ -173,7 +202,7 @@ nav {
 }
 
 .profile-side {
-  width: 300px;
+  width: 370px;
   background: #fff;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
   padding: 80px 30px 20px;
@@ -192,7 +221,7 @@ nav {
 }
 
 .profile-side p i {
-  color: #e40046;
+  color: #b9b8b8;
   margin-right: 10px;
 }
 
@@ -211,8 +240,8 @@ button.createbtn {
   padding: 10px;
   width: 100%;
   border-radius: 3px;
-  background: #e40046;
-  color: #fff;
+  background: #e0e0e0;
+  color: #1f1f1f;
   font-family: "Bree Serif";
   font-size: 1rem;
   margin: 5px 2px;
@@ -225,7 +254,7 @@ button.createbtn {
 
 button.chatbtn:hover,
 button.createbtn:hover {
-  background: rgba(288, 0, 70, 0.9);
+  background: #b3b3b3;
 }
 
 button.chatbtn i,
@@ -325,7 +354,21 @@ button.createbtn i {
  
 }
 
+#subscribe{
+    font-family: "Bree Serif", serif;
+    background-color: #e40046;
+    color: white;
+    margin-right: 20px;
+    padding: 10px 20px;
+    border: none;
+    font-size: smaller;
+    border-radius: 90px;
+    cursor: pointer;
+}
 
+#subscribe:hover{
+  background-color: #fb1f1f;
+}
 input[type=submit],
 button {
     background-color: #67b1f9;
@@ -429,6 +472,8 @@ input[type=text], input[type=email], select, textarea {
     margin-bottom: 16px;
     resize: vertical;
 }
+
+
 
 .dropdown {
   position: relative;
