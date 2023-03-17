@@ -196,10 +196,14 @@ def db_select_blogentry(blog_email):
 
     return jsonify(blogentry)
 
-@app.route('/images/<path:filename>')
-def image_path(filename):
-    app.logger.debug(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], '', filename ))
-    return send_from_directory(os.path.join('../',app.config['UPLOADED_PHOTOS_DEST'], ''), filename)
+@app.route('/images/<path:filename>/<int:owner_id>')
+@login_required
+def image_path(filename, owner_id):
+    app.logger.debug(f"owwner = {owner_id}, current_id = {current_user.id}")
+    if Subscribe.query.filter_by(user_sub=current_user.id, sub_owner=owner_id).first() or current_user.id == owner_id:
+        app.logger.debug(os.path.join(app.config['UPLOADED_PHOTOS_DEST'], '', filename ))
+        return send_from_directory(os.path.join(app.config['UPLOADED_PHOTOS_DEST'], ''), filename)
+    return send_from_directory(os.path.join(app.config['UPLOADED_PHOTOS_DEST'], ''), '404.jpg')
 
 #--------------------------- Subs ---------------------------------------------------------------------------
 
@@ -257,9 +261,10 @@ def freeFan():
         message = form.message.data
         pic = form.image.data
         filename = None
-
+        app.logger.debug(pic)
         if pic:
             filename = secure_filename(images.save(pic))
+            app.logger.debug(filename)
 
         if not id_:
             entry = Privateblog(message=message, avatar_url=current_user.avatar_url, img=filename, owner_id=current_user.id)

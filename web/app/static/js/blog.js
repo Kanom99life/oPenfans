@@ -64,7 +64,7 @@ function clearForm() {
 
 function blog_table(blog_data) {
     const data = { data: blog_data }
-    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url, img, can_read}) => {
+    const creatBlog = ({id, name, message, email, date_created, date_update, avatar_url, img, can_read, owner_id}) => {
         url = "/user/";
         curr_url ="/yourblog";
         lastestID = id;
@@ -77,9 +77,9 @@ function blog_table(blog_data) {
 
 
         if(oldDate.getUTCSeconds() === editDate.getUTCSeconds()){
-            return currentBlog(id, name, message, email, date, DMY, avatar_url, url, img, can_read);
+            return currentBlog(id, name, message, email, date, DMY, avatar_url, url, img, can_read, owner_id);
         } else{
-            return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url, img, can_read);
+            return editBlog(id, name, message, email, date, dateEdit, DMY, avatar_url, url, img, can_read, owner_id);
         }    
     };
 
@@ -93,7 +93,7 @@ function blog_table(blog_data) {
 };
 
 
-function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url, img, can_read){
+function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_url, url, img, can_read, owner_id){
   console.log(can_read);
   return `
       <div class="tweet">
@@ -139,7 +139,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
               `<div class="tweet-text" id="message${id}">${message}</div>
               ${ img ? 
               `<div class="tweet-text">
-                <img style="max-width: 75%" src="/images/${img}" />
+                <img style="max-width: 75%" src="/images/${img}/${owner_id}" />
               </div>` : ``
               }` : `<div style="background-color: #f2f2f2; padding: 10px; text-align: center; width: 94%;">
               <p style="display: inline-block; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; ">
@@ -157,7 +157,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
 };
 
 
-function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url, img, can_read){
+function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avatar_url , url, img, can_read, owner_id){
   console.log(can_read)
   return `
       <div class="tweet">
@@ -202,7 +202,7 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
                 `<div class="tweet-text" id="message${id}">${message}</div>
                 ${ img ? 
                 `<div class="tweet-text">
-                  <img style="max-width: 75%" src="/images/${img}" />
+                  <img style="max-width: 75%" src="/images/${img}/${owner_id}" />
                 </div>` : ``
                 }` : `<div style="background-color: #f2f2f2; padding: 10px; text-align: center; width: 94%;">
                 <p style="display: inline-block; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; ">
