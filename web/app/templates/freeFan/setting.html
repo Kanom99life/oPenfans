@@ -19,9 +19,10 @@
   <strong>Email</strong>
   <span id="userEmail">{{ current_user.email }}</span><br/>  
   {% if '@gmail.com' in current_user.email %}   
-  <!--<a href="https://myaccount.google.com/" target="_blank">Google Account settings</a>-->
+ 
+  <button  id="googleAcc"> <a href="https://myaccount.google.com/" target="_blank">Google Account settings</a></button> 
   {% else %} 
-  <button class="edit-profile-button" id="editBut"><i class="fa-solid fa-user"></i> Edit Profile</button> </br>
+  <button class="edit-profile-button" id="editBut"><i class="fa-solid fa-user"></i> Edit Account</button> </br>
   <button class="edit-pw-button" id="editPassword"><i class="fa-solid fa-key"></i> Change Password</button>
   {% endif %}
 </div>

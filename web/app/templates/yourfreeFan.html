@@ -74,7 +74,7 @@
     </div>
     <div class="main-bd">
       <div class="left-side">
-        <div class="profile-side" style="text-align:left;">          
+        <div class="profile-side" >          
           <p class="user-mail" ><i class="fa fa-envelope"></i>{{current_user.email}}</p>          
           <div class="profile-btn">
             <!-- <button class="chatbtn" id="chatBtn"><i class="fa fa-comment"></i><a href="mailto:">Send Email</a></button> -->            
@@ -108,15 +108,20 @@
                         {{ error }}
                       {% endfor %}
                     {% endif %}
-                    {{ form.image(accept_="image/*") }}
+                    {{ form.image(accept_="image/*", id="imageInput", style="display:none") }}
+                    <a style="display:inline-block; float:left; margin-left:10px; margin-bottom:10px; 
+                            color:#fff; background-color: #67b1f9; font-size:medium; font-family: Bree Serif, serif;
+                            padding: 10px 10px; border-radius: 50px; text-align: center; text-decoration: none;"
+                            onclick="document.getElementById('imageInput').click()">
+                        <i class="fa-solid fa-images"></i> Upload Image
+                    </a>
                     {% if form.image.errors %}
                       {% for error in form.image.errors %}
                         {{ error }}
                       {% endfor %}
                     {% endif %}
-                    <input type="submit" id="submit_form" name="submit" value="Post">
-                    <button id="clear_form" type="button">Clear</button>
                     <button id="cancel_form" type="button">Cancel</button>
+                    <input type="submit" id="submit_form" name="submit" value="Post">
                   </form>
                {% endif %}
               </div>

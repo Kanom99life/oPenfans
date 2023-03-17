@@ -87,7 +87,7 @@ def google_auth():
         db.session.commit()
         user = AuthUser.query.filter_by(email=email).first()
     login_user(user)
-    return redirect('/')
+    return redirect('/openfans')
 
 @app.route('/facebook/')
 def facebook():
@@ -133,7 +133,7 @@ def facebook_auth():
         db.session.commit()
         user = AuthUser.query.filter_by(email=email).first()
     login_user(user)
-    return redirect('/')
+    return redirect('/openfans')
 
 #------------------------ Database to JSON ----------------------------------------------------------------
 
@@ -247,7 +247,8 @@ def ToSubscribe(blog_email):
 
 # ------------------------- Web Page -------------------------------------------------------------------------
 
-@app.route('/', methods=('GET', 'POST'))
+@app.route('/openfans', methods=('GET', 'POST'))
+@login_required
 def freeFan():
     form = forms.BlogForm()
     if form.validate_on_submit():
@@ -369,10 +370,13 @@ def remove_blog_profile():
 @app.route('/profile')
 @login_required
 def freeFan_profile():
-    return render_template('freeFan/profile.html', current_user=current_user)
+    return render_template('freeFan/setting.html', current_user=current_user)
 
-@app.route('/login', methods=('GET', 'POST'))
+@app.route('/', methods=('GET', 'POST'))
 def freeFan_login():
+    if current_user.is_authenticated:
+        return redirect(url_for('freeFan'))
+
     if request.method == 'POST':
         # login code goes here
         email = request.form.get('email')
@@ -398,6 +402,7 @@ def freeFan_login():
         return redirect(next_page)
 
     return render_template('freeFan/login.html')
+
 
 
 @app.route('/signup', methods=('GET', 'POST'))

@@ -74,12 +74,13 @@
       <div class="profile-nav-info">        
         <h3 class="user-name">{{user.name}}</h3>        
         <form id="send_sub">
-          <!-- <input id="subscribe" type="hidden" value="" /> -->
+          
           {% if check_sub %}
           <button type="submit" id="subscribe" class="unsubscribe-btn">
             <span><i class="fa-solid fa-user-minus"></i> Unsubscribe</span> 
           </button>
           {% else %}
+          
             <input type="submit" id="subscribe" value="Subscribe" />
           {% endif %}
           <div class="profile-detail">

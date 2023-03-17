@@ -17,7 +17,7 @@
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
   <link rel="stylesheet" href="/static/css/openfan.css">
   <link rel="stylesheet" href="static/css/open-iconic-bootstrap.css">
-  <title>FreeFan</title>
+  <title>openFan</title>
   <link rel = "icon" href = "/static/img/heart.svg" type = "image/x-icon">
   <link rel="stylesheet" href="https://cdn-hk.icons8.com/docs/hOgjG0WCoE6SYuBn4sSYgw/style.css"> 
 
@@ -67,15 +67,55 @@
 
   <div class="container">
     <div class="row">
-      <div id="left_2" class="col-md-2"></div>
-      <div id="center_8" class="col-md-8">
+       
+      <div id="left_2" class="col-md-2">
+     
+          
+        <nav
+        id="sidebarMenu"
+        class="collapse d-lg-block sidebar collapse bg-white"
+        >
+     
+       <div class="list-group list-group-flush mx-3 mt-4">
+       
+         <a href="{{ url_for('freeFan') }}" class="list-group-item list-group-item-action py-2 ripple active" aria-current="true">
+           <i class="fas fa-tachometer-alt fa-fw me-3"></i> 
+           <span>Main dashboard</span>
+         </a>
+         
+         <a href="{{ url_for('userfreeFan') }}" class="list-group-item list-group-item-action py-2 ripple">
+          <i class="fa-solid fa-user"></i> 
+          <span>Your profile</span>
+        </a>
+
+         <a href="{{ url_for('freeFan_profile') }}" class="list-group-item list-group-item-action py-2 ripple ">
+            <i class="fa-solid fa-gear"></i>  
+             <span>Account setting</span>
+         </a>
+
+         <div class=animated-text>
+          <div id=ani-container>
+            Make 
+            <div id=flip>            
+              <div><div>Everything</div></div>
+              <div><div>Today</div></div>
+              <div><div>Life</div></div>
+            </div>
+          Awesome
+          </div>
+        </div>
+         
+     </div>
+   </nav>
+   </div>
+      <div id="center_9" class="col-md-10">
         <div class="content-box">
           <div class="new-tweet-row">
             <div class="row">
               <div class="col-md-12">
                 <div id="addBlog_display" class="container">
                   {% if current_user.is_authenticated %}
-                  <button id="add_blog" type="button" >What's on your mind?</button>
+                  <button id="add_blog" type="button" >Creat your blog</button>
                   
                   
                   {% endif %}
@@ -85,7 +125,7 @@
                   {% endif %}
                 </div>
                 <input type="hidden" id="curr_email" name="email" value="{{current_user.email}}">
-                <form id="addBlogBlog" hidden="hidden" method="post" enctype="multipart/form-data">
+                <form id="addBlogBlog" hidden="hidden" method="post" enctype="multipart/form-data" action="/openfans">
                   {{ form.csrf_token }}
                   {% if current_user.is_authenticated %}
                     {{ form.entryid()}}
@@ -95,15 +135,22 @@
                         {{ error }}
                       {% endfor %}
                     {% endif %}
-                    {{ form.image(accept_="image/*") }}
+                    {{ form.image(accept_="image/*", id="imageInput", style="display:none") }}
+                    <a style="display:inline-block; float:left; margin-left:10px; margin-bottom:10px; 
+                            color:#fff; background-color: #67b1f9; font-size:medium; font-family: Bree Serif, serif;
+                            padding: 10px 10px; border-radius: 50px; text-align: center; text-decoration: none;"
+                            onclick="document.getElementById('imageInput').click()">
+                        <i class="fa-solid fa-images"></i> Upload Image
+                    </a>
+                    
                     {% if form.image.errors %}
                       {% for error in form.image.errors %}
                         {{ error }}
                       {% endfor %}
                     {% endif %}
-                    <input type="submit" name="submit" value="Post">
-                    <button id="clear_form" type="button">Clear</button>
                     <button id="cancel_form" type="button">Cancel</button>
+                    <input type="submit" name="submit" value="Post">
+                    
                 </form>
                {% endif %}
               </div>
@@ -111,8 +158,9 @@
           </div>
           <div id="blog_display" class="container"></div>
         </div>
+       
       </div>
-      <div id="right_2" class="col-md-2"></div>
+      
     </div>
   </div>
   <script src="/static/js/blog.js"></script>
@@ -121,5 +169,8 @@
     if(e=document.getElementById(k))e.innerText=d[k]
     })})(`https://cdn-hk.icons8.com/docs/hOgjG0WCoE6SYuBn4sSYgw/text.json`)
     </script> 
+  
 </body>
+
+
 </html>

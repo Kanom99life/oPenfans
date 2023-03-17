@@ -145,7 +145,7 @@ function currentBlog(id, name, message, email, post_date, dateMonthYear, avatar_
               <p style="display: inline-block; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; ">
                 <i class="fas fa-lock" style="font-size: 3em;"></i>
                 <br>
-                <span style="font-size: 1.5em; ">This account is private, please subscribe to unlock the content.</span>
+                <span style="font-size: 1.2em; font-family: Bree Serif, serif;">This account is private, please subscribe to unlock the content.</span>
               </p>
             </div>
             `
@@ -204,7 +204,14 @@ function editBlog(id, name, message, email, date, edit_date, dateMonthYear, avat
                 `<div class="tweet-text">
                   <img style="max-width: 75%" src="/images/${img}" />
                 </div>` : ``
-                }` : `<p>This account is private. please subscribe to unlock the content.</p>`
+                }` : `<div style="background-color: #f2f2f2; padding: 10px; text-align: center; width: 94%;">
+                <p style="display: inline-block; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; ">
+                  <i class="fas fa-lock" style="font-size: 3em;"></i>
+                  <br>
+                  <span style="font-size: 1.2em; font-family: Bree Serif, serif;">This account is private, please subscribe to unlock the content.</span>
+                </p>
+              </div>
+              `
               }
           </div>
         </div>
